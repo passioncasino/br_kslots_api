@@ -33,3 +33,4 @@ src/public
 .env.prod.temp
 /cert
 mongo-data
+.env

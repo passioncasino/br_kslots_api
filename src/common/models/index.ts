@@ -273,7 +273,6 @@ export const saveHistory = async ( historyInfo: any ) => {
 
 export const updateSequenceHistory = async( historyInfo: any ) => {
     try {
-        console.log(`>> gameCode=${historyInfo.gameCode}`)
         const collection = selectCollection( historyInfo.gameCode );
         if( collection===false ) {
             return generateErrorResponse( 502 )
