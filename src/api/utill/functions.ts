@@ -1,9 +1,10 @@
-import { LauncherType } from "./interface";
-import * as Models from "../../common/models";
-import * as GlobalConstants from "./constants";
+import isaac from 'isaac';
+import * as Models from "@/common/models";
+import { LauncherType } from "@/api/utill/interface";
+import * as GlobalConstants from "@/api/utill/constants";
 const currencyData = require("@/currencies.json");
 
-let round = 0;
+let nid = 1e12, round = 0, prefix = 192453;
 
 export const validateProviderParams = ( params : LauncherType ) => {
     if(params.ip === "") return 7;
@@ -41,6 +42,20 @@ export const generateToken = async( mode:string ) => {
     return token;
 }
 
+export const getIdxByRand = ( gameCode:string, flag: string ) => {
+    const multipliers = GlobalConstants.MULTIPLIER_RULE_BY_GAME[ gameCode ][ flag ].multipliers;
+    const rules = GlobalConstants.MULTIPLIER_RULE_BY_GAME[ gameCode ][ flag ].rules;
+    const mulRand = isaac.random();
+    let mul = multipliers[ 0 ];
+    for( let i=0; i<rules.length; i++ ) {
+        if( rules[i]>=mulRand ) {
+            mul = multipliers[ i ];
+            return mul;
+        }
+    }
+    return mul;
+}
+
 export const generateProviderErrorString = ( errorCode : number ) => {
     let errorString : any;
     errorString = {
@@ -67,6 +82,22 @@ export const generateErrorResponse = ( errorCode:number ) => {
 /**
  * PG SOFT
  */
+export const generatePgNextId = () => {
+    nid++;
+    if( nid > 1e13-1 ) {
+        prefix++;
+        nid = 1e12;
+    }
+    return String(prefix) + String( nid );
+}
+
+export function getKeyByEndpoint(endpoint: string): number {
+    return Number(
+      Object.keys(GlobalConstants.PGGAMEINFO).find(
+        (key) => GlobalConstants.PGGAMEINFO[Number(key)].endpoint === endpoint
+      )
+    );
+  }
 
 export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string, traceId:string ) => {
     const userInfo = await Models.getUserInfo( otk, gi );
@@ -82,6 +113,18 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
         return errorResponse;
     } else {
         const currencyInfo = currencyData.find((currency:any) => currency.cc === userInfo.property.currency);
+        let geu = "";
+        switch (gi) {
+            case "1543462":
+                geu = "rabbit"
+                break;
+            case "98":
+                geu = "ox"
+                break;
+        
+            default:
+                break;
+        }
         const resp = {
             dt: {
                 oj: { 
@@ -91,7 +134,7 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
                 pcd: "a7kbetbr_30248538",
                 tk: otk,
                 st: 1,
-                geu: `game-api/fortune-rabbit/`,
+                geu: `game-api/fortune-${geu}/`,
                 lau: "game-api/lobby/",
                 bau: "web-api/game-proxy/",
                 cc: userInfo.property.currency,
@@ -200,7 +243,7 @@ export const generateBetSummary = async() => {
                 bc: 1,
                 btba: 4, // total bet amount for 10 times
                 btwla: -4, // total profit for 10 times
-                gid: "pg1tiger", // 126 
+                gid: 126, // 126 
                 lbid: now // 1725192145878978800
             },
             lut: 1725192145879

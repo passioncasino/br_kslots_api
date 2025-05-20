@@ -42,7 +42,7 @@ export const commonService = {
             const res = await Models.addUser(userInfo)
             if( res ) {
                 launcherUrl = 
-                    `https://${ process.env.GAMESERVERHOST }/${ launcher.game }/index.html?`+
+                    `${ process.env.OPERATOR_HOST }/${ launcher.game }/index.html?`+
                     `ot=${ userInfo.token }`+
                     `&btt=${ launcher.mode==="real" ? 1 : 2 }`+
                     `&l=${ launcher.lang }`+

@@ -4,6 +4,7 @@ const daily = 86340;
 const _SERVERERROR = 501;
 let Users : any;
 let PG2RabbitHistories  : any;
+let PG1OxHistories  : any;
 
 export const connect = async (dbName : string) => {
     try {
@@ -15,6 +16,7 @@ export const connect = async (dbName : string) => {
         Users = db.collection('Users');
 
         PG2RabbitHistories  = db.collection('PG2RabbitHistories');
+        PG1OxHistories  = db.collection('PG1OxHistories');
 
         return true;
     } catch ( error ) {
@@ -24,8 +26,10 @@ export const connect = async (dbName : string) => {
 
 const selectCollection = ( gameCode:string ) => {
         switch ( gameCode ) {
+            case "98":
+                return PG1OxHistories;
             case "1543462":
-            case "pg2rabbit":   return PG2RabbitHistories;
+                return PG2RabbitHistories;
         }
 }
 
@@ -34,16 +38,30 @@ const selectCollection = ( gameCode:string ) => {
  */
 
 const initUserInfo = ( userInfo:any ) => {
-    userInfo["gameStatus"] = {
-        coin : 0.03,
-        cwc : 0,
-        twMoney : 0,
-        isFWS : false,
-        fws : 0,
-        fwsCnt : -1,
-        fwsSymbols : [] as number[],
-        fsWinMoney : 0
-    };
+    switch (userInfo.property.game) {
+        case "1543462":
+            userInfo["gameStatus"] = {
+                coin : 0.03,
+                sid : "0",
+                isFs : false,
+                fsCnt : 0,
+                fsProfit : 0
+            };            
+            break;
+        case "98":
+            userInfo["gameStatus"] = {
+                coin : 0.03,
+                sid : "0",
+                cwc : 0,
+                twMoney : 0,
+                isFs : false,
+                fws : 0,
+                fsCnt : 0,
+                fsProfit : 0,
+                fwsSymbols : [] as number[],
+            };
+            break;
+    }
     return userInfo;
 }
 
@@ -161,34 +179,48 @@ export const updateUserBalance = async( user : string, newBalance : number ) => 
     }
 }
 
-export const updateUserInfo = async ( gameCode: string, mgckey : string, userInfo:any ) => {
+export const updateUserInfo = async ( gameCode: string, mgckey: string, userInfo: any ) => {
     try {
-        const provider = gameCode.slice( 0, 2 );
-        switch (provider) {
-            case "pg" :
-                switch (gameCode) {
-                    case "pg2rabbit" :
-                        const pg2 = await Users.updateOne(
-                            { token: mgckey, "property.game" : gameCode },
-                            {
-                                $set : {
-                                    "property.lastId" : userInfo.property.lastId,
-                                    gameStatus : {
-                                        twMoney : userInfo.gameStatus.twMoney,
-                                        coin : userInfo.gameStatus.coin,
-                                        cwc : userInfo.gameStatus.cwc,
-                                        isFWS : userInfo.gameStatus.isFWS,
-                                        fws : userInfo.gameStatus.fws,
-                                        fwsCnt : userInfo.gameStatus.fwsCnt,
-                                        fwsSymbols : userInfo.gameStatus.fwsSymbols,
-                                        fsWinMoney : userInfo.gameStatus.fsProfit,
-                                    }
-                                }
+        switch (gameCode) {
+            case "1543462" :
+                const pg2 = await Users.updateOne(
+                    { token: mgckey, "property.game" : gameCode },
+                    {
+                        $set : {
+                            "property.lastId" : userInfo.property.lastId,
+                            gameStatus : {
+                                coin : userInfo.gameStatus.coin,
+                                sid: userInfo.gameStatus.sid,
+                                isFs : userInfo.gameStatus.isFs,
+                                fsCnt : userInfo.gameStatus.fsCnt,
+                                fsProfit : userInfo.gameStatus.fsProfit,
                             }
-                        )
-                        return (pg2.modifiedCount>0 && pg2.matchedCount===1) ? 1 : 0;
-                }
+                        }
+                    }
+                );
+                return (pg2.modifiedCount>0 && pg2.matchedCount===1) ? 1 : 0;
+            case "98" :
+                const pg98 = await Users.updateOne(
+                    { token: mgckey, "property.game" : gameCode },
+                    {
+                        $set : {
+                            "property.lastId" : userInfo.property.lastId,
+                            gameStatus : {
+                                twMoney : userInfo.gameStatus.twMoney,
+                                coin : userInfo.gameStatus.coin,
+                                cwc : userInfo.gameStatus.cwc,
+                                isFWS : userInfo.gameStatus.isFWS,
+                                fws : userInfo.gameStatus.fws,
+                                fwsCnt : userInfo.gameStatus.fwsCnt,
+                                fwsSymbols : userInfo.gameStatus.fwsSymbols,
+                                fsWinMoney : userInfo.gameStatus.fsProfit,
+                            }
+                        }
+                    }
+                )
+                return (pg98.modifiedCount>0 && pg98.matchedCount===1) ? 1 : 0;
         }
+
     } catch (error) {
         console.log('updateUserInfo', error);
         return -1;
@@ -241,12 +273,13 @@ export const saveHistory = async ( historyInfo: any ) => {
 
 export const updateSequenceHistory = async( historyInfo: any ) => {
     try {
+        console.log(`>> gameCode=${historyInfo.gameCode}`)
         const collection = selectCollection( historyInfo.gameCode );
         if( collection===false ) {
             return generateErrorResponse( 502 )
         } else {
-            collection.updateOne(
-                { roundid : historyInfo.roundid },
+            const res = await collection.updateOne(
+                { roundid : historyInfo.lastId },
                 { 
                     $set : {
                         profit : historyInfo.profit,
@@ -257,6 +290,7 @@ export const updateSequenceHistory = async( historyInfo: any ) => {
                     }
                 }
             )
+            return ( res.modifiedCount>0 && res.matchedCount===1 ) ? 1 : 0;
         }
     } catch (error) {
         console.log(`updateSequenceHistory error`, error);

@@ -5,7 +5,6 @@ export const pgGameCodes : { [key:number] : string } = {
 export const PGGAMEINFO: { [key:number] : any } = {
     1543462: {
         endpoint: "fortune-rabbit",
-        gi  : 1543462,
         orl : [ 8,8,5,99,5,6,6,2,2,3,3,99 ],
         ml  : [ 1,2,3,4,5,6,7,8,9,10 ],
         cs  : {
@@ -30,6 +29,32 @@ export const PGGAMEINFO: { [key:number] : any } = {
             }
         }
     },
+    98: {
+        endpoint: "fortune-ox",
+
+    }
+}
+
+export const PAYLINESBYGAME: {[ key: string ] : {[ key: number ]: number[] }} = {
+    1543462: {
+        1: [0,4,8], 2: [0,5,8], 3: [0,5,9], 4: [1,5,8], 5: [1,5,9], 
+        6: [1,6,9], 7: [1,6,10], 8: [2,6,9], 9: [2,6,10], 10: [ 2,7,10 ]
+    },
+}
+
+export const PAYTABLESBYGAME : { [key: string] : { [key: number]: number[] } } = {
+    1543462: {
+        0: [200], 2: [100], 3: [50], 4: [10], 5: [5], 6: [3], 7: [2]
+    },
+}
+
+export const MULTIPLIER_RULE_BY_GAME : {[ gameCode:string ]: {[ feature: string ]: {[ item: string ] : number[] }}} = {
+    1543462: {
+        prize : {
+            multipliers : [ 0.5, 1, 2, 3, 5, 8, 10, 12, 15, 18, 20, 25, 30, 35 ],
+            rules : [ 0.056, 0.289, 0.457, 0.564, 0.658, 0.736, 0.806, 0.864, 0.902, 0.937, 0.963, 0.982, 0.994, 1 ]
+        }
+    }
 }
 
 export const ERRORDESCRIPTION: {[ key: number ]: string } = {

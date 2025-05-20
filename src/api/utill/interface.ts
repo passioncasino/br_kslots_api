@@ -19,13 +19,34 @@ export interface PGActionType {
     cs : number
     ml : number
     pf : number
-    id : number
+    id : string
     wk : string
     btt : number
     atk : string
-    fb : number
+    // fb : number
 }
 
+export interface PGScoreProps {
+    gameCode : string
+    symbols: number[]
+    stake: number
+    wild: number
+}
+export interface PGSpinParamType {
+    symbols: number[]
+    actionData: PGActionType
+    scoreInfo: any[]
+    prizes: number[]
+    cptw: number
+    stake: number
+    ctw: number
+    spinProfit: number
+    nextId: string
+    isFs: boolean
+    fsCnt: number
+    fsProfit: number
+    balance: number
+}
 export interface HistoryType {
     roundid: string
     user : string

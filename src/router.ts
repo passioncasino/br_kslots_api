@@ -1,10 +1,10 @@
 import express, { Request, Response, Router } from 'express';
-import { pgGameCodes } from '@/api/utill/constants';
-import { commonService } from '@/api/game/commonService';
-import { LauncherType, PGActionType } from '@/api/utill/interface';
-import { pgSoftService } from '@/api/game/commonService';
 import { getUserInfo  } from '@/common/models';
-import { pg2rabbitService } from "./api/game/pgsoft/pg2rabbit/service";
+import { getKeyByEndpoint } from '@/api/utill/functions';
+import { commonService, pgSoftService } from '@/api/game/commonService';
+import { LauncherType, PGActionType } from '@/api/utill/interface';
+import { fortuneRabbitService } from "@/api/game/pgsoft/1543462/service";
+import { fortuneOxService } from "@/api/game/pgsoft/98/service";
 
 export const gameRouter: Router = (() => {
     const router = express.Router();
@@ -65,18 +65,28 @@ export const pgWebRouter: Router = (() => {
 
 export const pgGameRouter: Router = (() => {
     const router = express.Router();
-    router.post('/fortune-rabbit/v2/Spin', async (req: Request, res: Response) => {
+    router.post('/:endpoint/v2/Spin', async (req: Request, res: Response) => {
+        const endpoint = req.params.endpoint;
+        // console.log(`spin endpoint=${endpoint}`);
+        let response: any = {};
         const actionData : PGActionType = req.body;
-
-        let response = await pg2rabbitService.handleSpin( actionData );
+        switch (endpoint) {
+            case "fortune-rabbit":
+                response = await fortuneRabbitService.handleSpin( actionData );
+                break;
+            case "fortune-ox":
+                response = await fortuneOxService.handleSpin( actionData );
+                break;
+        }
         res.json(response);
     });
 
-    router.post('/fortune-rabbit/v2/GameInfo/Get', async (req: Request, res: Response) => {
-        const gameCode = "1543462";
+    router.post('/:endpoint/v2/GameInfo/Get', async (req: Request, res: Response) => {
+        const endpoint = req.params.endpoint;
+        console.log(`info endpoint=${endpoint}`);
+        const gameCode = getKeyByEndpoint(endpoint);
         const { btt, atk, pf } = req.body;
-
-        const response = await pgSoftService.getGameInfo( atk, gameCode );
+        const response = await pgSoftService.getGameInfo( atk, String(gameCode) );
 
         res.json(response);
     });
