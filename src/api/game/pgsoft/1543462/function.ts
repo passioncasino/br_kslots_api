@@ -16,7 +16,7 @@ interface fs {
 }
 
 const GAMECODE = "1543462", money = 8;
-let ftid = 0;
+
 export const getSymbols = ( isFs:boolean ) => {
     const REELS: {[key: string]: Array<number[]>} = {
         NORMAL: [
@@ -41,19 +41,9 @@ export const getSymbols = ( isFs:boolean ) => {
             symbols.push( SYMBOLS[ind][ (reelRand+j)%SYMBOLS[ind].length ] );
         }
     }
-    const ftSymbols = [
-        [ 1, 1, 1, 99, 1, 1, 8, 8, 1, 1, 1, 99 ],
-        [ 8, 1, 1, 99, 1, 1, 8, 1, 8, 1, 1, 99 ],
-        [ 1, 1, 8, 99, 1, 1, 1, 1, 8, 1, 1, 99 ],
-        [ 1, 1, 8, 99, 8, 8, 1, 1, 1, 1, 8, 99 ],
-        [ 1, 8, 8, 99, 1, 1, 1, 8, 1, 1, 8, 99 ],
-        [ 1, 8, 1, 99, 8, 8, 8, 1, 1, 8, 8, 99 ],
-        [ 1, 1, 8, 99, 1, 1, 1, 8, 1, 8, 1, 99 ],
-        [ 1, 1, 1, 99, 1, 1, 1, 8, 1, 1, 8, 99 ],
-    ]
+
     symbols[ 3 ] = symbols[ 11 ] = 99;
-    symbols = ftSymbols[ ftid ];
-    ftid++;
+
     console.log(`symbols=[ ${symbols} ]`);
     if( 
         !isFs &&

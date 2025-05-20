@@ -105,8 +105,8 @@ export const pgSoftService = {
         return response;
     },
 
-    getGameRule : async() => {
-        const response = GlobalFunctions.generateGameRule();
+    getGameRule : async( gid:string ) => {
+        const response = GlobalFunctions.generateGameRule( gid );
         return response;
     },
 
