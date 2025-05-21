@@ -163,7 +163,7 @@ export function getKeyByEndpoint(endpoint: string): number {
   }
 
 export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string, traceId:string ) => {
-    if( gi==="1695365" || gi==="1682240" ) gi="98";
+    if( gi==="1682240" ) gi="98";
     const userInfo = await Models.getUserInfo( otk, gi );
     if (userInfo === null) {
         const errorResponse = {
