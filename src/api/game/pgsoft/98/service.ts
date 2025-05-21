@@ -18,7 +18,7 @@ export const fortuneOxService = {
         // if ((userInfo.balance - 10 * betCoin) < 0) return GlobalConstants.ERRORSTRING[1];
         if (!userInfo.gameStatus.isFWS) userInfo.balance = Math.round(100 * userInfo.balance - 1000 * betCoin) / 100;
 
-        const gameInfo = getGameInfo(rtp, userInfo.gameStatus.isFWS, betCoin);
+        const gameInfo = getGameInfo( userInfo.gameStatus.isFWS, betCoin );
         if (gameInfo.isOxFeature) {
             userInfo.gameStatus.isFWS = true;
             if (userInfo.gameStatus.fwsCnt === -1) userInfo.gameStatus.fwsCnt = 0;

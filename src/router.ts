@@ -5,6 +5,7 @@ import { commonService, pgSoftService } from '@/api/game/commonService';
 import { LauncherType, PGActionType } from '@/api/utill/interface';
 import { fortuneRabbitService } from "@/api/game/pgsoft/1543462/service";
 import { fortuneOxService } from "@/api/game/pgsoft/98/service";
+import { fortuneTigerService } from "@/api/game/pgsoft/126/service";
 
 export const gameRouter: Router = (() => {
     const router = express.Router();
@@ -72,6 +73,9 @@ export const pgGameRouter: Router = (() => {
         let response: any = {};
         const actionData : PGActionType = req.body;
         switch (endpoint) {
+            case "fortune-tiger":
+                response = await fortuneTigerService.handleSpin( actionData );
+                break;
             case "fortune-rabbit":
                 response = await fortuneRabbitService.handleSpin( actionData );
                 break;

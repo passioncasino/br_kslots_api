@@ -5,6 +5,7 @@ const _SERVERERROR = 501;
 let Users : any;
 let PG2RabbitHistories  : any;
 let PG1OxHistories  : any;
+let PGTigerHistories  : any;
 
 export const connect = async (dbName : string) => {
     try {
@@ -15,8 +16,9 @@ export const connect = async (dbName : string) => {
         const db = client.db(dbName);
         Users = db.collection('Users');
 
-        PG2RabbitHistories  = db.collection('PG2RabbitHistories');
         PG1OxHistories  = db.collection('PG1OxHistories');
+        PGTigerHistories  = db.collection('PGTigerHistories');
+        PG2RabbitHistories  = db.collection('PG2RabbitHistories');
 
         return true;
     } catch ( error ) {
@@ -28,6 +30,8 @@ const selectCollection = ( gameCode:string ) => {
         switch ( gameCode ) {
             case "98":
                 return PG1OxHistories;
+            case "126":
+                return PGTigerHistories;
             case "1543462":
                 return PG2RabbitHistories;
         }
@@ -39,15 +43,6 @@ const selectCollection = ( gameCode:string ) => {
 
 const initUserInfo = ( userInfo:any ) => {
     switch (userInfo.property.game) {
-        case "1543462":
-            userInfo["gameStatus"] = {
-                coin : 0.03,
-                sid : "0",
-                isFs : false,
-                fsCnt : 0,
-                fsProfit : 0
-            };            
-            break;
         case "98":
             userInfo["gameStatus"] = {
                 coin : 0.03,
@@ -60,6 +55,25 @@ const initUserInfo = ( userInfo:any ) => {
                 fsProfit : 0,
                 fwsSymbols : [] as number[],
             };
+            break;
+        case "126":
+            userInfo["gameStatus"] = {
+                coin : 0.08,
+                twMoney : 0,
+                isFWS : false,
+                fws : 0,
+                fwsCnt : -1,
+                fwsSymbols : [] as number[],
+            };
+            break;
+        case "1543462":
+            userInfo["gameStatus"] = {
+                coin : 0.03,
+                sid : "0",
+                isFs : false,
+                fsCnt : 0,
+                fsProfit : 0
+            };            
             break;
     }
     return userInfo;
@@ -182,23 +196,6 @@ export const updateUserBalance = async( user : string, newBalance : number ) => 
 export const updateUserInfo = async ( gameCode: string, mgckey: string, userInfo: any ) => {
     try {
         switch (gameCode) {
-            case "1543462" :
-                const pg2 = await Users.updateOne(
-                    { token: mgckey, "property.game" : gameCode },
-                    {
-                        $set : {
-                            "property.lastId" : userInfo.property.lastId,
-                            gameStatus : {
-                                coin : userInfo.gameStatus.coin,
-                                sid: userInfo.gameStatus.sid,
-                                isFs : userInfo.gameStatus.isFs,
-                                fsCnt : userInfo.gameStatus.fsCnt,
-                                fsProfit : userInfo.gameStatus.fsProfit,
-                            }
-                        }
-                    }
-                );
-                return (pg2.modifiedCount>0 && pg2.matchedCount===1) ? 1 : 0;
             case "98" :
                 const pg98 = await Users.updateOne(
                     { token: mgckey, "property.game" : gameCode },
@@ -219,6 +216,41 @@ export const updateUserInfo = async ( gameCode: string, mgckey: string, userInfo
                     }
                 )
                 return (pg98.modifiedCount>0 && pg98.matchedCount===1) ? 1 : 0;
+            case "126" :
+                const pg1 = await Users.updateOne(
+                    { token: mgckey, "property.game" : gameCode },
+                    {
+                        $set : {
+                            "property.lastId" : userInfo.property.lastId,
+                            gameStatus : {
+                                coin : userInfo.gameStatus.coin,
+                                isFWS : userInfo.gameStatus.isFWS,
+                                fws : userInfo.gameStatus.fws,
+                                fwsCnt : userInfo.gameStatus.fwsCnt,
+                                fwsSymbols : userInfo.gameStatus.fwsSymbols
+                            }
+                        }
+                    }
+                )
+                return (pg1.modifiedCount>0 && pg1.matchedCount===1) ? 1 : 0;
+            case "1543462" :
+                const pg2 = await Users.updateOne(
+                    { token: mgckey, "property.game" : gameCode },
+                    {
+                        $set : {
+                            "property.lastId" : userInfo.property.lastId,
+                            gameStatus : {
+                                coin : userInfo.gameStatus.coin,
+                                sid: userInfo.gameStatus.sid,
+                                isFs : userInfo.gameStatus.isFs,
+                                fsCnt : userInfo.gameStatus.fsCnt,
+                                fsProfit : userInfo.gameStatus.fsProfit,
+                            }
+                        }
+                    }
+                );
+                return (pg2.modifiedCount>0 && pg2.matchedCount===1) ? 1 : 0;
+
         }
 
     } catch (error) {

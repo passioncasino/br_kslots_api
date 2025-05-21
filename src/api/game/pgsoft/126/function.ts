@@ -3,16 +3,6 @@ import * as GlobalFunctions from '@/api/utill/functions';
 import * as GlobalConstants from '@/api/utill/constants';
 const GAMECODE = "126";
 
-const REEL: {
-    [key: number]: Array < number[] >
-} = {
-    1: [
-        [4, 6, 7, 4, 6, 7, 6, 7, 6, 5, 7, 6, 5, 2, 6, 5, 2, 6, 7, 0, 5, 6, 7, 6, 5, 3, 2, 7, 6, 5, 6, 4, 6, 7, 7, 5, 6, 2, 4, 6, 5, 7, 6, 5, 6, 7, 6, 4, 2, 7, 3, 7, 6, 2, 3, 4, 6, 7, 0, 6, 2, 5, 6, 7, 3, 5, 5, 7, 0, 6, 7, 3, 6, 5, 7, 5, 6, 7, 2, 7, 5, 6, 5, 4, 7, 5, 6, 3, 6, 4, 2, 6, 7, 6, 5, 3, 6, 7, 5, 6, 5, 2, 7, 3, 6, 5, 5, 3, 3, 6, 7, 7, 7, 4, 3, 2, 7, 4, 7, 6, 6, 3, 7, 6, 3, 2, 5, 4, 4, 6, 7, 3, 5, 7, 2, 6, 4, 6, 7, 5, 2, 6, 4, 2, 5, 7, 6, 5],
-        [3, 7, 6, 3, 7, 3, 4, 6, 7, 5, 3, 7, 5, 2, 5, 6, 5, 7, 7, 4, 4, 5, 7, 5, 6, 3, 2, 4, 5, 7, 5, 7, 2, 5, 3, 7, 3, 3, 4, 5, 7, 2, 3, 4, 2, 7, 6, 3, 7, 0, 6, 5, 2, 3, 7, 7, 0, 5, 6, 4, 5, 7, 5, 6, 7, 2, 0, 2, 6, 2, 4, 6, 3, 3, 2, 7, 2, 7, 3, 7, 6, 7, 6, 5, 5, 6, 5, 6, 3, 7, 7, 6, 7, 4, 6, 7, 0, 2, 0, 4, 7, 5, 7, 5, 7, 3, 4, 7, 5, 5, 7, 2, 6, 7, 6, 4, 6, 5, 7, 0, 5, 7, 6, 6, 5, 7, 5, 5, 3, 3, 7, 2, 6, 7, 0, 3, 0, 7, 7, 0, 5, 2, 7, 6, 4, 7, 2, 0],
-        [6, 5, 7, 4, 6, 7, 6, 6, 4, 7, 0, 4, 6, 7, 6, 7, 6, 6, 7, 3, 4, 5, 5, 7, 6, 0, 7, 4, 6, 3, 7, 6, 2, 2, 6, 2, 5, 7, 6, 3, 5, 7, 7, 5, 4, 5, 6, 2, 4, 2, 6, 3, 7, 6, 0, 5, 2, 2, 7, 0, 6, 5, 3, 3, 6, 5, 4, 4, 4, 6, 5, 7, 7, 6, 6, 6, 4, 7, 7, 5, 5, 7, 3, 0, 5, 7, 3, 7, 4, 5, 3, 3, 3, 6, 0, 5, 5, 6, 0, 3, 7, 7, 6, 5, 2, 3, 3, 7, 5, 4, 4, 5, 4, 7, 2, 4, 7, 4, 7, 4, 7, 7, 2, 6, 2, 6, 2, 4, 7, 6, 7, 4, 3, 5, 6, 3, 6, 5, 4, 2, 7, 7, 6, 7, 4, 7, 5, 6]
-    ]
-}
-
 export const getSymbolInfo = (rtp: number, isFWS: boolean, fws: number, fwsSymbols: number[]) => {
     const symbolDis: {
         [key: number]: number
@@ -25,7 +15,11 @@ export const getSymbolInfo = (rtp: number, isFWS: boolean, fws: number, fwsSymbo
         6: 0,
         7: 0,
     }
-    const SYMBOLS = REEL[rtp];
+    const SYMBOLS: number[][] = [
+        [4, 6, 7, 4, 6, 7, 6, 7, 6, 5, 7, 6, 5, 2, 6, 5, 2, 6, 7, 0, 5, 6, 7, 6, 5, 3, 2, 7, 6, 5, 6, 4, 6, 7, 7, 5, 6, 2, 4, 6, 5, 7, 6, 5, 6, 7, 6, 4, 2, 7, 3, 7, 6, 2, 3, 4, 6, 7, 0, 6, 2, 5, 6, 7, 3, 5, 5, 7, 0, 6, 7, 3, 6, 5, 7, 5, 6, 7, 2, 7, 5, 6, 5, 4, 7, 5, 6, 3, 6, 4, 2, 6, 7, 6, 5, 3, 6, 7, 5, 6, 5, 2, 7, 3, 6, 5, 5, 3, 3, 6, 7, 7, 7, 4, 3, 2, 7, 4, 7, 6, 6, 3, 7, 6, 3, 2, 5, 4, 4, 6, 7, 3, 5, 7, 2, 6, 4, 6, 7, 5, 2, 6, 4, 2, 5, 7, 6, 5],
+        [3, 7, 6, 3, 7, 3, 4, 6, 7, 5, 3, 7, 5, 2, 5, 6, 5, 7, 7, 4, 4, 5, 7, 5, 6, 3, 2, 4, 5, 7, 5, 7, 2, 5, 3, 7, 3, 3, 4, 5, 7, 2, 3, 4, 2, 7, 6, 3, 7, 0, 6, 5, 2, 3, 7, 7, 0, 5, 6, 4, 5, 7, 5, 6, 7, 2, 0, 2, 6, 2, 4, 6, 3, 3, 2, 7, 2, 7, 3, 7, 6, 7, 6, 5, 5, 6, 5, 6, 3, 7, 7, 6, 7, 4, 6, 7, 0, 2, 0, 4, 7, 5, 7, 5, 7, 3, 4, 7, 5, 5, 7, 2, 6, 7, 6, 4, 6, 5, 7, 0, 5, 7, 6, 6, 5, 7, 5, 5, 3, 3, 7, 2, 6, 7, 0, 3, 0, 7, 7, 0, 5, 2, 7, 6, 4, 7, 2, 0],
+        [6, 5, 7, 4, 6, 7, 6, 6, 4, 7, 0, 4, 6, 7, 6, 7, 6, 6, 7, 3, 4, 5, 5, 7, 6, 0, 7, 4, 6, 3, 7, 6, 2, 2, 6, 2, 5, 7, 6, 3, 5, 7, 7, 5, 4, 5, 6, 2, 4, 2, 6, 3, 7, 6, 0, 5, 2, 2, 7, 0, 6, 5, 3, 3, 6, 5, 4, 4, 4, 6, 5, 7, 7, 6, 6, 6, 4, 7, 7, 5, 5, 7, 3, 0, 5, 7, 3, 7, 4, 5, 3, 3, 3, 6, 0, 5, 5, 6, 0, 3, 7, 7, 6, 5, 2, 3, 3, 7, 5, 4, 4, 5, 4, 7, 2, 4, 7, 4, 7, 4, 7, 7, 2, 6, 2, 6, 2, 4, 7, 6, 7, 4, 3, 5, 6, 3, 6, 5, 4, 2, 7, 7, 6, 7, 4, 7, 5, 6]
+    ]
     let symbols: number[] = [];
 
     if (isFWS) {
@@ -60,6 +54,7 @@ export const getSymbolInfo = (rtp: number, isFWS: boolean, fws: number, fwsSymbo
             }
         }
     }
+
     symbols.forEach((symbol) => {
         symbolDis[symbol]++;
     })
@@ -114,7 +109,7 @@ export const generateSpinResponse = (spinParams: any) => {
             tbVal = 0;
             cwsVal = 1;
             fstc = {
-                "4": spinParams.fwsCnt
+                4: spinParams.fwsCnt
             };
         }
     }
@@ -122,57 +117,50 @@ export const generateSpinResponse = (spinParams: any) => {
     const scoreInfo = generateScoreInfoStr(spinParams.scoreInfo, spinParams.benefits);
 
     const spin = {
-        "dt": {
-            "si": {
-                "wc": 17,
-                "ist": false,
-                "itw": itwFlag,
-                "fws": spinParams.fwsVal,
-                "wp": scoreInfo.wpInfo,
-                "orl": spinParams.fwsCnt > 0 ? null : spinParams.symbols,
-                "lw": scoreInfo.lwInfo,
-                "irs": irsFlag,
-                "gwt": -1,
-                "fb": null,
-                "ctw": Math.round(((spinParams.spinProfit * 5) / 8) * 100) / 100,
-                "pmt": null,
-                "cwc": cwsVal,
-                "fstc": fstc,
-                "pcwc": cwsVal,
-                "rwsp": scoreInfo.rwspInfo,
-                "ml": spinParams.ml,
-                "cs": spinParams.coin,
-                "rl": spinParams.symbols,
-                "st": stVal,
-                "nst": nstVal,
-                "pf": spinParams.pf,
-                "aw": spinParams.spinProfit,
-                "wid": 0,
-                "wt": "C",
-                "wk": spinParams.wk,
-                "wbn": null,
-                "wfg": null,
-                "tb": tbVal,
-                "tbb": betMoney,
-                "tw": spinParams.spinProfit,
-                "np": Math.round(spinParams.spinProfit * 100 - tbVal * 100) / 100,
-                "ocr": null,
-                "mr": null,
-                "ge": [nstVal, 11],
-                "psid": (now * 100).toString(),
-                "sid": (now * 100).toString(),
-                "blb": Math.round( spinParams.balance*100 + tbVal*100 ) / 100,
-                // "blab": spinParams.fwsCnt === 0 ? spinParams.balance : Math.round( spinParams.balance*100 + tbVal*100 ) / 100,
-                "blab": spinParams.balance,
-                "bl": Math.round( spinParams.balance*100 + spinParams.spinProfit*100 ) / 100
-            }
-        },
-        "err": null
+        wc: 17,
+        ist: false,
+        itw: itwFlag,
+        fws: spinParams.fwsVal,
+        wp: scoreInfo.wpInfo,
+        orl: spinParams.fwsCnt > 0 ? null : spinParams.symbols,
+        lw: scoreInfo.lwInfo,
+        irs: irsFlag,
+        gwt: -1,
+        fb: null,
+        ctw: Math.round(((spinParams.spinProfit * 5) / 8) * 100) / 100,
+        pmt: null,
+        cwc: cwsVal,
+        fstc: fstc,
+        pcwc: cwsVal,
+        rwsp: scoreInfo.rwspInfo,
+        ml: spinParams.ml,
+        cs: spinParams.coin,
+        rl: spinParams.symbols,
+        st: stVal,
+        nst: nstVal,
+        pf: spinParams.pf,
+        aw: spinParams.spinProfit,
+        wid: 0,
+        wt: "C",
+        wk: spinParams.wk,
+        wbn: null,
+        wfg: null,
+        tb: tbVal,
+        tbb: betMoney,
+        tw: spinParams.spinProfit,
+        np: Math.round(spinParams.spinProfit * 100 - tbVal * 100) / 100,
+        ocr: null,
+        mr: null,
+        ge: [nstVal, 11],
+        psid: (now * 100).toString(),
+        sid: (now * 100).toString(),
+        blb: Math.round( spinParams.balance*100 + tbVal*100 ) / 100,
+        // blab: spinParams.fwsCnt === 0 ? spinParams.balance : Math.round( spinParams.balance*100 + tbVal*100 ) / 100,
+        blab: spinParams.balance,
+        bl: Math.round( spinParams.balance*100 + spinParams.spinProfit*100 ) / 100
     }
     return spin;
 }
-
-// const fsSymbols = [ 3, 5, 3, 4, 5, 5, 5, 5, 5 ];
 
 /*
 {

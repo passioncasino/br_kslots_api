@@ -130,8 +130,6 @@ export const fortuneRabbitService = {
             await updateUserBalance( userInfo.property.user, userInfo.balance );
         }
         await updateUserInfo( GAMECODE, actionData.atk, userInfo );
-
-
         return res;
     }
 }

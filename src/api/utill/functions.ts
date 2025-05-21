@@ -163,7 +163,7 @@ export function getKeyByEndpoint(endpoint: string): number {
   }
 
 export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string, traceId:string ) => {
-    if( gi==="126" || gi==="1695365" || gi==="1682240" ) gi="98";
+    if( gi==="1695365" || gi==="1682240" ) gi="98";
     const userInfo = await Models.getUserInfo( otk, gi );
     if (userInfo === null) {
         const errorResponse = {
@@ -434,6 +434,52 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         ge: null
     }
 
+    const tigerResp = {
+        wp: null,
+        lw: null,
+        rf: false,
+        rtf: false,
+        fs: false,
+        rc: 0,
+        im: false,
+        itw: false,
+        wc: 0,
+        gwt: 0,
+        ctw: 0,
+        pmt: null,
+        cwc: 0,
+        fstc: null,
+        pcwc: 0,
+        rwsp: null,
+        hashr: null,
+        fb: null,
+        ab: null,
+        ml: 10,
+        cs: 0.05,
+        rl: [ 2,2,2,99,0,0,0,0,3,3,3,99 ],
+        sid: "0",
+        psid: "0",
+        st: 1,
+        nst: 1,
+        pf: 0,
+        aw: 0,
+        wid: 0,
+        wt: "C",
+        wk: "0_C",
+        wbn: null,
+        wfg: null,
+        blb: 0,
+        blab: 0,
+        bl: 22.77,
+        tb: 0,
+        tbb: 0,
+        tw: 0,
+        np: 0,
+        ocr: null,
+        mr: null,
+        ge: null
+    }
+
     const gameInfoResponse: any = {
         dt: {
             fb: null,
@@ -447,20 +493,20 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             bl: userInfo.balance,
             inwe: false,
             iuwe: false,
-            ls: {
-                si: rabbitResp
-            },
             cc: userInfo.property.currency
         },
         err: null
     };
 
     switch ( gi ) {
+        case "126":
+            gameInfoResponse.dt.ls = { si: tigerResp };
+            break;
         case "98":
-            gameInfoResponse.ls.si = oxResp;
+            gameInfoResponse.dt.ls = { si: oxResp };
             break;
         case "1543462":
-            gameInfoResponse.ls.si = rabbitResp;
+            gameInfoResponse.dt.ls = { si: rabbitResp };
             break;
     }
 

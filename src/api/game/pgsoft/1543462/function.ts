@@ -78,7 +78,6 @@ export const checkScoreLine = ( params: PGScoreProps ) => {
             payVal.symbol = keySymbol;
             payVal.line = i;
             for(let j = 1; j < payLine.length; j++) {
-                // insert for pg
                 if( payVal.symbol === params.wild ) {
                     for( let i=1; i<payLine.length;i++ ) {
                         if( 
@@ -91,7 +90,6 @@ export const checkScoreLine = ( params: PGScoreProps ) => {
                         }
                     }
                 }
-                // insert for pg
                 if( payVal.symbol === params.symbols[ payLine[j] ] 
                     || params.symbols[ payLine[j] ] === params.wild 
                 ) {
@@ -121,7 +119,7 @@ export function getPrizeInfo( symbols: number[], stake: number ) {
     let id = 0;
     for (let ind = 0; ind < symbols.length; ind++) {
         if( symbols[ind]===money ) {
-            const prize = getIdxByRand( GAMECODE, "prize" ); // moneys[i]
+            const prize = getIdxByRand( GAMECODE, "prize" );
             prizes.push( prize );
             cptw = Math.round( cptw*100 + prize*100 ) / 100;
             id++;
@@ -136,13 +134,11 @@ const getCPF = ( stake: number, symbols: number[], prizes:number[] ) => {
     let key = 1;
     let idx = 0;
     for (let ind = 0; ind < symbols.length; ind++) {
-        // if( symbols[ind] !== 99 ) {
-            if( symbols[ind]===money ) {
-                cpfs[key] = { p: idx, bv: stake*prizes[key-1], m: prizes[key-1] };
-                key++;
-            }
-            idx++;
-        // }
+        if( symbols[ind]===money ) {
+            cpfs[key] = { p: idx, bv: stake*prizes[key-1], m: prizes[key-1] };
+            key++;
+        }
+        idx++;
     }
     return cpfs;
 }
@@ -218,52 +214,50 @@ export const generateSpinResponse = ( params: PGSpinParamType ) => {
         bl = Math.round( blab*100 + params.fsProfit*100 ) / 100;
     }
     const spinResponse = {
-        si: {
-            wp: wpInfo,
-            lw: lwInfo,
-            orl: params.symbols,
-            ift: false,
-            iff: iff,
-            cpf: cpfs,
-            cptw: params.cptw,
-            crtw: 0,
-            imw: false,
-            fs: fs,
-            gwt: gwt,
-            pmt: null,
-            ab: null,
-            ml: Number(params.actionData.ml),
-            cs: Number(params.actionData.cs),
-            rl: params.symbols,
-            ctw: params.spinProfit,
-            cwc: cwc,
-            fstc: fstc,
-            pcwc: params.ctw>0? 1 : 0,
-            rwsp: rwspInfo,
-            hashr: "0:8;6;3#8;2;7#8;2;0#99;3;99#MV#6.0#MT#1#MG#0#",
-            fb: null,
-            sid: params.nextId,
-            psid: params.nextId,
-            st: st,
-            nst: nst,
-            pf: Number(params.actionData.pf),
-            aw: profit,
-            wid: 0,
-            wt: "C",
-            wk: params.actionData.wk,
-            wbn: null,
-            wfg: null,
-            blb: blb,
-            blab: blab,
-            bl: bl,
-            tb: tb,
-            tbb: params.stake,
-            tw: params.spinProfit,
-            np: Math.round( params.spinProfit*100-tb*100 )/100,
-            ocr: null,
-            mr: null,
-            ge: [ ge, 11 ]
-        }
+        wp: wpInfo,
+        lw: lwInfo,
+        orl: params.symbols,
+        ift: false,
+        iff: iff,
+        cpf: cpfs,
+        cptw: params.cptw,
+        crtw: 0,
+        imw: false,
+        fs: fs,
+        gwt: gwt,
+        pmt: null,
+        ab: null,
+        ml: Number(params.actionData.ml),
+        cs: Number(params.actionData.cs),
+        rl: params.symbols,
+        ctw: params.spinProfit,
+        cwc: cwc,
+        fstc: fstc,
+        pcwc: params.ctw>0? 1 : 0,
+        rwsp: rwspInfo,
+        hashr: "0:8;6;3#8;2;7#8;2;0#99;3;99#MV#6.0#MT#1#MG#0#",
+        fb: null,
+        sid: params.nextId,
+        psid: params.nextId,
+        st: st,
+        nst: nst,
+        pf: Number(params.actionData.pf),
+        aw: profit,
+        wid: 0,
+        wt: "C",
+        wk: params.actionData.wk,
+        wbn: null,
+        wfg: null,
+        blb: blb,
+        blab: blab,
+        bl: bl,
+        tb: tb,
+        tbb: params.stake,
+        tw: params.spinProfit,
+        np: Math.round( params.spinProfit*100-tb*100 )/100,
+        ocr: null,
+        mr: null,
+        ge: [ ge, 11 ]
     };
 
     return spinResponse;

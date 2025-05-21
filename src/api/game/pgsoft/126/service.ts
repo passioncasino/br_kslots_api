@@ -4,7 +4,7 @@ import * as GlobalFunctions from '@/api/utill/functions';
 import * as Models from '@/common/models';
 import * as Functions from './function';
 
-export const pg1tigerService = {
+export const fortuneTigerService = {
     handleSpin: async (actionData: GlobalTypes.PGActionType) => {
         const GAMECODE = "126";
         const userInfo = await Models.getUserInfo( actionData.atk, GAMECODE );
@@ -13,7 +13,6 @@ export const pg1tigerService = {
         userInfo.gameStatus.coin = Number(actionData.cs);
         const ml = Number(actionData.ml);
         const rtp = userInfo.property.rtp;
-        const isFunMode = userInfo.property.mode === 0 ? true : false;
         const now = GlobalFunctions.getCurrentTime();
         const betCoin = Math.round( userInfo.gameStatus.coin*ml*100 )/100;
 
@@ -42,9 +41,9 @@ export const pg1tigerService = {
         }
 
         if( !userInfo.gameStatus.isFWS ) {
-            if( userInfo.gameStatus.fwsCnt===-1 ) userInfo.balance = Math.round( userInfo.balance*100-betCoin*500 ) / 100;
+            if( userInfo.gameStatus.fwsCnt===-1 ) userInfo.balance = Math.round( userInfo.balance*100-betCoin*1000 ) / 100;
         } else {
-            if( userInfo.gameStatus.fwsCnt === 0) userInfo.balance = Math.round( userInfo.balance*100-betCoin*500 ) / 100;
+            if( userInfo.gameStatus.fwsCnt === 0) userInfo.balance = Math.round( userInfo.balance*100-betCoin*1000 ) / 100;
         }
         const spinProfit = userInfo.gameStatus.isFWS ? 0 : lineProfit;
         const roundid = GlobalFunctions.generateRoundNo( now, GAMECODE );
@@ -66,7 +65,12 @@ export const pg1tigerService = {
             fwsCnt : userInfo.gameStatus.fwsCnt
         }
         const spinResponse = Functions.generateSpinResponse( spinParams );
-
+        const res = {
+            dt: {
+                si: spinResponse
+            },
+            err: null
+        }
         const historyInfo : GlobalTypes.HistoryType = {
             gameCode : GAMECODE, 
             roundid : roundid, 
@@ -75,14 +79,14 @@ export const pg1tigerService = {
             currency : userInfo.property.currency,
             stake : 0,
             profit : 0,
-            response : spinResponse,
+            response : res,
             isSequence : false
         }
         const sequenceHistoryInfo : GlobalTypes.SequenceHistoryType = {
             gameCode : GAMECODE, 
             lastId : userInfo.property.lastId, 
             profit : 0,
-            response : spinResponse
+            response : res
         }
         
         if( !userInfo.gameStatus.isFWS ) {
@@ -115,7 +119,6 @@ export const pg1tigerService = {
 
         await Models.updateUserBalance( userInfo.property.user, userInfo.balance );
         await Models.updateUserInfo( GAMECODE, userInfo.token, userInfo );
-        console.log("======>", spinParams.isFWS, spinParams.fwsCnt, betCoin, userInfo.balance, lineProfit, "response :: ", JSON.stringify( spinResponse ) );
-        return spinResponse;
+        return res;
     }
 }
