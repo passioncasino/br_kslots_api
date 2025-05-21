@@ -44,6 +44,7 @@ const selectCollection = ( gameCode:string ) => {
 const initUserInfo = ( userInfo:any ) => {
     switch (userInfo.property.game) {
         case "98":
+        case "1659365":
             userInfo["gameStatus"] = {
                 coin : 0.03,
                 sid : "0",
@@ -234,6 +235,7 @@ export const updateUserInfo = async ( gameCode: string, mgckey: string, userInfo
                 )
                 return (pg1.modifiedCount>0 && pg1.matchedCount===1) ? 1 : 0;
             case "1543462" :
+            case "1659365" :
                 const pg2 = await Users.updateOne(
                     { token: mgckey, "property.game" : gameCode },
                     {

@@ -23,7 +23,7 @@ export interface PGActionType {
     wk : string
     btt : number
     atk : string
-    // fb : number
+    fb : number
 }
 
 export interface PGScoreProps {

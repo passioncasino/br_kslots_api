@@ -122,8 +122,8 @@ export const PAYTABLESBYGAME : { [key: string] : { [key: number]: number[] } } =
 export const MULTIPLIER_RULE_BY_GAME : {[ gameCode:string ]: {[ feature: string ]: {[ item: string ] : number[] }}} = {
     "1543462": {
         prize : {
-            multipliers : [ 0.5, 1, 2, 3, 5, 8, 10, 12, 15, 18, 20, 25, 30, 35 ],
-            rules : [ 0.056, 0.289, 0.457, 0.564, 0.658, 0.736, 0.806, 0.864, 0.902, 0.937, 0.963, 0.982, 0.994, 1 ]
+            multipliers : [ 0.5, 1, 2, 5, 10, 20, 30, 50, 100, 500 ],
+            rules : [ 0.5492, 0.6545, 0.6796, 0.9089, 0.9718, 0.9841, 0.9868, 0.9994, 0.9999, 1 ]
         }
     }
 }

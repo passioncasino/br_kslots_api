@@ -363,8 +363,8 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         ml: gameInfo.ml[0],
         cs: csInfo[0],
         rl: gameInfo.orl,
-        sid: "1922078743963241984",
-        psid: "1922078743963241984",
+        sid: "0",
+        psid: "0",
         st: 1,
         nst: 1,
         pf: 1,
@@ -408,9 +408,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         ab: null,
         ml: 10,
         cs: 0.05,
-        rl: [
-            2,2,2,99,0,0,0,0,3,3,3,99
-        ],
+        rl: gameInfo.orl,
         sid: "0",
         psid: "0",
         st: 1,
@@ -424,7 +422,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         wfg: null,
         blb: 0,
         blab: 0,
-        bl: 22.77,
+        bl: userInfo.balance,
         tb: 0,
         tbb: 0,
         tw: 0,
@@ -435,15 +433,14 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
     }
 
     const tigerResp = {
-        wp: null,
-        lw: null,
-        rf: false,
-        rtf: false,
-        fs: false,
-        rc: 0,
-        im: false,
+        wc: 3,
+        ist: false,
         itw: false,
-        wc: 0,
+        fws: 0,
+        wp: null,
+        orl: null,
+        lw: null,
+        irs: false,
         gwt: 0,
         ctw: 0,
         pmt: null,
@@ -454,9 +451,9 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         hashr: null,
         fb: null,
         ab: null,
-        ml: 10,
-        cs: 0.05,
-        rl: [ 2,2,2,99,0,0,0,0,3,3,3,99 ],
+        ml: gameInfo.ml[0],
+        cs: csInfo[0],
+        rl: gameInfo.orl,
         sid: "0",
         psid: "0",
         st: 1,
@@ -470,7 +467,64 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         wfg: null,
         blb: 0,
         blab: 0,
-        bl: 22.77,
+        bl: userInfo.balance,
+        tb: 0,
+        tbb: 0,
+        tw: 0,
+        np: 0,
+        ocr: null,
+        mr: null,
+        ge: null
+    }
+
+    const dragonResp = {
+        wp: null,
+        lw: null,
+        gm: 1,
+        it: false,
+        orl: gameInfo.orl,
+        fs: null,
+        mf: {
+            "mt": [
+                2
+            ],
+            "ms": [
+                true
+            ],
+            "mi": [
+                0
+            ]
+        },
+        ssaw: 0,
+        crtw: 0,
+        imw: false,
+        gwt: 0,
+        ctw: 0,
+        pmt: null,
+        cwc: 0,
+        fstc: null,
+        pcwc: 0,
+        rwsp: null,
+        hashr: null,
+        fb: null,
+        ab: null,
+        ml: gameInfo.ml[0],
+        cs: csInfo[0],
+        rl: gameInfo.orl,
+        sid: "0",
+        psid: "0",
+        st: 1,
+        nst: 1,
+        pf: 0,
+        aw: 0,
+        wid: 0,
+        wt: "C",
+        wk: "0_C",
+        wbn: null,
+        wfg: null,
+        blb: 0,
+        blab: 0,
+        bl: userInfo.balance,
         tb: 0,
         tbb: 0,
         tw: 0,
@@ -507,6 +561,9 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             break;
         case "1543462":
             gameInfoResponse.dt.ls = { si: rabbitResp };
+            break;
+        case "1695365":
+            gameInfoResponse.dt.ls = { si: dragonResp };
             break;
     }
 
