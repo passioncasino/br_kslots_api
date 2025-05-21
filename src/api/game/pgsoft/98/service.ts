@@ -41,8 +41,13 @@ export const fortuneOxService = {
             fwsCnt : userInfo.gameStatus.fwsCnt
         }
 
-        const spinResponse = generateSpinResponse(spinParams);
-
+        const spinRes = generateSpinResponse(spinParams);
+        const resp = {
+            dt: {
+                si: spinRes
+            },
+            err: null
+        }
         const roundid = generateRoundNo( now, GAMECODE );
         const historyInfo : HistoryType = {
             gameCode : GAMECODE, 
@@ -52,7 +57,7 @@ export const fortuneOxService = {
             currency : userInfo.property.currency,
             stake : 0,
             profit : 0,
-            response : spinResponse,
+            response : resp,
             isSequence : false
         }
 
@@ -65,7 +70,7 @@ export const fortuneOxService = {
                     gameCode : GAMECODE, 
                     lastId : userInfo.property.lastId, 
                     profit : 0,
-                    response : spinResponse
+                    response : resp
                 }
                 await updateSequenceHistory( sequenceHistoryInfo ); 
             }
@@ -75,15 +80,16 @@ export const fortuneOxService = {
         }
 
         if (!userInfo.gameStatus.isFWS) {
-            userInfo.balance = Math.round( 100 * userInfo.balance + 100 * twMoney ) / 100;            
-            
+            userInfo.balance = Math.round( 100 * userInfo.balance + 100 * twMoney ) / 100;
             if (userInfo.gameStatus.fwsCnt > 0 && gameInfo.scoreInfo.totalWin !== 0) {
                 userInfo.gameStatus.fwsCnt = -1;
-            } else await saveHistory( historyInfo );
+            } else {
+                await saveHistory( historyInfo );
+            }
         }
         await updateUserBalance( userInfo.property.user, userInfo.balance );
         await updateUserInfo( GAMECODE, userInfo.token, userInfo );
-        console.log(`pg3ox spinResponse :: ${JSON.stringify( spinResponse )}`);
-        return spinResponse;
+
+        return resp;
     }
 }

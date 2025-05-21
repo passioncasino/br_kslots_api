@@ -75,6 +75,13 @@ export const fortuneRabbitService = {
             balance: userInfo.balance
         };
         const spinRes = generateSpinResponse( params );
+        const res = {
+            dt: {
+                si: spinRes
+            },
+            err: null
+        };
+
         const now = getCurrentTime();
         const roundid = generateRoundNo( now, GAMECODE );
         const historyInfo : HistoryType = {
@@ -85,9 +92,10 @@ export const fortuneRabbitService = {
             currency : userInfo.property.currency,
             stake : 0,
             profit : 0,
-            response : spinRes,
+            response : res,
             isSequence : false
         }
+
         if( userInfo.gameStatus.isFs ) {
             if( userInfo.gameStatus.fsCnt === 1 ) {
                 userInfo.balance = Math.round( userInfo.balance*100 - stake*100 ) / 100;
@@ -99,7 +107,7 @@ export const fortuneRabbitService = {
                     gameCode : GAMECODE, 
                     lastId : userInfo.property.lastId, 
                     profit : 0,
-                    response : spinRes
+                    response : res
                 }
                 await updateSequenceHistory( sequenceHistoryInfo ); 
             }
@@ -122,6 +130,8 @@ export const fortuneRabbitService = {
             await updateUserBalance( userInfo.property.user, userInfo.balance );
         }
         await updateUserInfo( GAMECODE, actionData.atk, userInfo );
-        return spinRes;
+
+
+        return res;
     }
 }

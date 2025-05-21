@@ -52,7 +52,8 @@ export const pgWebRouter: Router = (() => {
     });
 
     router.post('/game-proxy/v2/GameRule/Get', async (req: Request, res: Response) => {
-        const response = await pgSoftService.getGameRule();
+        const { btt, gid, atk, pf } = req.body;
+        const response = await pgSoftService.getGameRule( gid );
         res.json( response );
     });
 

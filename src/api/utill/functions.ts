@@ -78,7 +78,70 @@ export const generateErrorResponse = ( errorCode:number ) => {
     };
     return response;
 }
+/**
+ * Common functions
+ */
+export const checkScoreLine = ( symbolArr : number[], gameCode : string, wild : number ) => {
+    let minKey = 0;
+    let twoSymbol = 0;
+    let maxKey = 10;
+    const payArr : any[] = [];
 
+    for( let i=1; i<=Object.keys( GlobalConstants.PAYLINESBYGAME[gameCode] ).length; i++ ) {
+        let isWin = false;
+        const payVal:any = {
+            symbol: 0,
+            line : 0,
+            sameCount: 1
+        };
+        const payLine = GlobalConstants.PAYLINESBYGAME[gameCode][i];
+        const keySymbol = symbolArr[payLine[0]];
+        if( keySymbol >= minKey && keySymbol <= maxKey ) {
+            payVal.symbol = keySymbol;
+            payVal.line = i;
+            for(let j = 1; j < payLine.length; j++) {
+                // insert for pg
+                if( payVal.symbol === wild ) {
+                    for( let i=1; i<payLine.length;i++ ) {
+                        if( symbolArr[payLine[i]]>1 && symbolArr[payLine[i]] !== wild ){
+                            payVal.symbol = symbolArr[payLine[i]];
+                            break;
+                        }
+                    }
+                }
+                // insert for pg
+                if( payVal.symbol === symbolArr[ payLine[j] ] || symbolArr[ payLine[j] ] === wild ) {
+                    payVal.sameCount++;
+                } else {
+                    break;
+                }
+            }
+            if(payVal.sameCount === 2 && payVal.symbol === twoSymbol) isWin = true;
+            else if(payVal.sameCount > 2) isWin = true;
+
+            if(isWin) payArr.push( payVal );
+        }
+    }
+    return payArr;
+}
+
+export const calcScoreLineBenefit = ( payArr : any[], betMoney : number, gameCode: string, reelWidth : number ) => {
+    const benefits : number[] = [];
+    payArr.forEach(item => {
+        if( item.symbol !== -1 ) {
+            benefits.push( Math.round((GlobalConstants.PAYTABLESBYGAME[gameCode][ item.symbol ][ reelWidth - item.sameCount ] || 0)*betMoney*100)/100 );
+        }
+    })
+    return benefits;    
+}
+
+export const compareArray = ( arr1:number[], arr2:number[] ) => {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+}
 /**
  * PG SOFT
  */
@@ -114,48 +177,38 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
         return errorResponse;
     } else {
         const currencyInfo = currencyData.find((currency:any) => currency.cc === userInfo.property.currency);
-        let geu = "";
-        switch (gi) {
-            case "1543462":
-                geu = "rabbit"
-                break;
-            case "98":
-                geu = "ox"
-                break;
-        
-            default:
-                break;
-        }
-        const resp = {
+        const pcd = "a7kbetbr_30248538";
+
+        const resp: any = {
             dt: {
                 oj: { 
                     jid: 11
                 },
-                pid: "2qrzu401OJ",
-                pcd: "a7kbetbr_30248538",
+                pid: "2PP8xwNlmH",
+                pcd: pcd,
                 tk: otk,
                 st: 1,
-                geu: `game-api/fortune-${geu}/`,
+                geu: `game-api/${GlobalConstants.PGGAMEINFO[ gi ].endpoint}/`,
                 lau: "game-api/lobby/",
                 bau: "web-api/game-proxy/",
                 cc: userInfo.property.currency,
                 cs: currencyInfo ? currencyInfo.symbol : "Currency Symbol not found!",
-                nkn: "a7kbetbr_30248538",
+                nkn: pcd,
                 gm: [ 
                     {
-                        gid: 1543462,
+                        gid: gi,
                         msdt: 1673431954000,
                         medt: 1673431954000,
                         st: 1,
                         amsg: "",
                         rtp: {
                             df: {
-                                min: 96.75,
-                                max: 96.75
+                                min: GlobalConstants.PGGAMEINFO[ gi ].rtp[ 0 ],
+                                max: GlobalConstants.PGGAMEINFO[ gi ].rtp[ 1 ]
                             }
                         },
-                        mxe: 5000,
-                        mxehr: 1000000000
+                        mxe: GlobalConstants.PGGAMEINFO[ gi ].mxe,
+                        mxehr: GlobalConstants.PGGAMEINFO[ gi ].mxehr
                     }
                 ],
                 uiogc: {
@@ -211,7 +264,7 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
                 },
                 ioph: "fc0172cbc121",
                 sdn: "api",
-                eatk: "bVAQ+3eFrfmDLlPJDem0FmXMn9h+34hG/Nosx/cImGVh7s+1HehvbXGUVNMElhOtwgy5cTHc3qI/jj9RFjVeuKSi4JyTG22tJ6WkFiU6Zj24CCzbPQt9f/MVtcK5cFyi/DSwS9e74oouJKo/+oIwUdpM/yseACt6AUJblj1BkRRRWXhm7K6cCRoBJGCcPPOzIg/T0BV7Gg6njlJgc8FXi8dMhDGay+/u2TLnhmL5rAgxs86S83dXClp0Nvh2/1rX",
+                eatk: GlobalConstants.PGGAMEINFO[ gi ].eatk,
                 jc: {
                     grtp: 1,
                     bf: 0,
@@ -232,104 +285,15 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
             },
             err: null
         }
+
+        if( gi==="98" ) resp.dt.gcv = "1.1.0.9";
+        if( gi==="1682240" ) resp.dt.gcv = "1.4.0.4";
         return resp;
     } 
 }
 
-export const generateBetSummary = async() => {
-    const now = getCurrentTime();
-    const response = {
-        dt: {
-            bs: {
-                bc: 1,
-                btba: 4, // total bet amount for 10 times
-                btwla: -4, // total profit for 10 times
-                gid: 126, // 126 
-                lbid: now // 1725192145878978800
-            },
-            lut: 1725192145879
-        },
-        err: null
-    };
-    return response;
-}
-
-export const generateBetHistory = async() => {
-    const now = getCurrentTime();
-    const response = {
-        dt: {
-            bh: [
-                {
-                    cc: "BRL",
-                    bt: 1725192145879,
-                    fscc: 0,
-                    ge: [ 1, 11 ],
-                    gid: 126,
-                    gtba: 4,
-                    gtwla: -4,
-                    mgcc: 0,
-                    tid: String(now), // "1725192145878978800",
-                    bd: [
-                        {
-                            bl: 715682.95,
-                            bt: 1725192145879,
-                            tba: 4,
-                            twla: -4,
-                            tid: String(now), // "1725192145878978800",
-                            gd: {
-                                wc: 31,
-                                ist: false,
-                                itw: true,
-                                fws: 0,
-                                wp: null,
-                                orl: [ 4, 2, 2, 7, 2, 6, 6, 7, 3 ],
-                                lw: null,
-                                irs: false,
-                                gwt: -1,
-                                fb: null,
-                                ctw: 0,
-                                pmt: null,
-                                cwc: 0,
-                                fstc: null,
-                                pcwc: 0,
-                                rwsp: null,
-                                ml: 10,
-                                cs: 0.08,
-                                rl: [ 4, 2, 2, 7, 2, 6, 6, 7, 3 ],
-                                st: 1,
-                                nst: 1,
-                                pf: 1,
-                                aw: 0,
-                                wid: 0,
-                                wt: "C",
-                                wk: "0_C",
-                                wbn: null,
-                                wfg: null,
-                                tb: 4,
-                                tbb: 4,
-                                tw: 0,
-                                np: -4,
-                                ocr: null,
-                                mr: null,
-                                ge: [ 1, 11 ],
-                                psid: String(now), // "1725192145878978800",
-                                sid: String(now), // "1725192145878978800",
-                                blb: 715686.95,
-                                blab: 715682.95,
-                                bl: 715682.95
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        err: null
-    };
-    return response;
-}
-
-export const generateGameRule = async() => {
-    const gameInfo = GlobalConstants.PGGAMEINFO[1543462];
+export const generateGameRule = async( gid:string ) => {
+    const gameInfo = GlobalConstants.PGGAMEINFO[ gid ];
     const response = {
         dt: {
             rtp: {
@@ -372,12 +336,105 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
     const userInfo = await Models.getUserInfo( atk, gi );
     if (userInfo === null) return GlobalConstants.ERRORSTRING[6];
     
-    const gameInfo = GlobalConstants.PGGAMEINFO[ 1543462 ];
+    const gameInfo = GlobalConstants.PGGAMEINFO[ gi ];
     const csInfo = gameInfo.cs[userInfo.property.currency]
 
-    let gameInfoResponse = {};
+    const rabbitResp = {
+        wp: null,
+        lw: null,
+        orl: gameInfo.orl,
+        ift: false,
+        iff: false,
+        cpf: {},
+        cptw: 0,
+        crtw: 0,
+        imw: false,
+        fs: null,
+        gwt: -1,
+        ctw: 0,
+        pmt: null,
+        cwc: 0,
+        fstc: null,
+        pcwc: 0,
+        rwsp: null,
+        hashr: null,
+        fb: null,
+        ab: null,
+        ml: gameInfo.ml[0],
+        cs: csInfo[0],
+        rl: gameInfo.orl,
+        sid: "1922078743963241984",
+        psid: "1922078743963241984",
+        st: 1,
+        nst: 1,
+        pf: 1,
+        aw: 0,
+        wid: 0,
+        wt: "C",
+        wk: "0_C",
+        wbn: null,
+        wfg: null,
+        blb: 0,
+        blab: 0,
+        bl: userInfo.balance,
+        tb: 0,
+        tbb: 0,
+        tw: 0,
+        np: 0,
+        ocr: null,
+        mr: null,
+        ge: [ 1, 11 ]
+    };
 
-    const rabbitResponse = {
+    const oxResp = {
+        wp: null,
+        lw: null,
+        rf: false,
+        rtf: false,
+        fs: false,
+        rc: 0,
+        im: false,
+        itw: false,
+        wc: 0,
+        gwt: 0,
+        ctw: 0,
+        pmt: null,
+        cwc: 0,
+        fstc: null,
+        pcwc: 0,
+        rwsp: null,
+        hashr: null,
+        fb: null,
+        ab: null,
+        ml: 10,
+        cs: 0.05,
+        rl: [
+            2,2,2,99,0,0,0,0,3,3,3,99
+        ],
+        sid: "0",
+        psid: "0",
+        st: 1,
+        nst: 1,
+        pf: 0,
+        aw: 0,
+        wid: 0,
+        wt: "C",
+        wk: "0_C",
+        wbn: null,
+        wfg: null,
+        blb: 0,
+        blab: 0,
+        bl: 22.77,
+        tb: 0,
+        tbb: 0,
+        tw: 0,
+        np: 0,
+        ocr: null,
+        mr: null,
+        ge: null
+    }
+
+    const gameInfoResponse: any = {
         dt: {
             fb: null,
             wt: gameInfo.wt,
@@ -391,59 +448,21 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             inwe: false,
             iuwe: false,
             ls: {
-                si: {
-                    wp: null,
-                    lw: null,
-                    orl: gameInfo.orl,
-                    ift: false,
-                    iff: false,
-                    cpf: gameInfo.cpf,
-                    cptw: 0,
-                    crtw: 0,
-                    imw: false,
-                    fs: null,
-                    gwt: -1,
-                    ctw: 0,
-                    pmt: null,
-                    cwc: 0,
-                    fstc: null,
-                    pcwc: 0,
-                    rwsp: null,
-                    hashr: null,
-                    fb: null,
-                    ab: null,
-                    ml: gameInfo.ml[0],
-                    cs: csInfo[0],
-                    rl: gameInfo.orl,
-                    sid: "1922078743963241984",
-                    psid: "1922078743963241984",
-                    st: 1,
-                    nst: 1,
-                    pf: 1,
-                    aw: 0,
-                    wid: 0,
-                    wt: "C",
-                    wk: "0_C",
-                    wbn: null,
-                    wfg: null,
-                    blb: 0,
-                    blab: 0,
-                    bl: userInfo.balance,
-                    tb: 0,
-                    tbb: 0,
-                    tw: 0,
-                    np: 0,
-                    ocr: null,
-                    mr: null,
-                    ge: [ 1, 11 ]
-                }
+                si: rabbitResp
             },
             cc: userInfo.property.currency
         },
         err: null
     };
-        
-    gameInfoResponse = rabbitResponse;
+
+    switch ( gi ) {
+        case "98":
+            gameInfoResponse.ls.si = oxResp;
+            break;
+        case "1543462":
+            gameInfoResponse.ls.si = rabbitResp;
+            break;
+    }
 
     return gameInfoResponse;
 }

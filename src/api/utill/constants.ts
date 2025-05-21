@@ -1,55 +1,116 @@
-export const pgGameCodes : { [key:number] : string } = {
-    1543462: "pg2rabbit",
-};
-
-export const PGGAMEINFO: { [key:number] : any } = {
-    1543462: {
-        endpoint: "fortune-rabbit",
-        orl : [ 8,8,5,99,5,6,6,2,2,3,3,99 ],
-        ml  : [ 1,2,3,4,5,6,7,8,9,10 ],
-        cs  : {
+export const PGGAMEINFO: { [key:string] : any } = {
+    "98": {
+        endpoint: "fortune-ox",
+        cs : {
             USD: [ 0.03, 0.1, 0.3, 0.9 ],
             EUR: [ 0.03, 0.1, 0.3, 0.9 ],
             ARS: [ 2, 5, 20, 100 ],
-            BRL: [ 0.05, 0.5, 4 ]
+            BRL: [ 0.05, 0.5, 4 ],
+            MXN : [ 0.05, 0.5, 4 ]
         },
+        orl : [ 2, 2, 2, 99, 0, 0, 0, 0, 3, 3, 3, 99 ],
+        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
+        wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
+        mxl : 10,
+        rtp : [ 96.75, 96.75 ],
+        
+        mxe : 2000,
+        mxehr: 348818392,
+        eatk: "bVAQ+3eFrfmDLlPJDem0FmXMn9h+34hG/Nosx/cImGXQrTZValAiSrp+EfUFanNwnGkoqzhEcmcwuiPP/pp1+V73vjpfp3obQDD5+5tV8d4zhURTh5NxEAJMciQkqHqqbW3vTF9pCv2xBJ65T9ABdW/KhM+RsYkYhHTIqUFmWGxwNX+5xUjf2NQlFiIC8+y5CQOX2Grj5sCUrIQl9SM+H9NuN9JPTAbUB2iOu8oiscKzNsQGp0LG36g+9knLGBZW"
+    },
+    "126": {
+        endpoint: "fortune-tiger",
+        cs : {
+            USD: [ 0.08, 0.8, 3, 10 ],
+            EUR: [ 0.08, 0.8, 3, 10 ],
+            ARS: [ 0.08, 0.8, 3, 10 ],
+            BRL: [ 0.08, 0.8, 3, 10 ],
+            MXN : [ 0.08, 0.8, 3, 10 ]
+        },
+        orl : [ 2, 2, 5, 0, 0, 0, 6, 3, 3 ],
+        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
+        wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
+        mxl : 10,
+        rtp : [ 96.81, 96.81 ],
+
+        mxe : 2500,
+        mxehr: 8960913,
+        eatk: "bVAQ+3eFrfmDLlPJDem0FmXMn9h+34hG/Nosx/cImGWrduO02Ie6hxWj81NPxJ5k4gSo58JMkEiWdLDkpLqlEC2A0whab25OCyDWnE0JYP+9CYgL3Ady6dRS867h3RjVzBTTuVUhTxZgIbTdsor8kVMF2+ZieZcLkTMwvC0wDiyfMeL5iaxJnVVStjup8keSF4if+HzgWqbG3dndVxpY9YP1sLJXtMQi+JEBv7sHJaYDolpY+trZW5RKueAN2M+e"
+    },
+    "1543462": {
+        endpoint: "fortune-rabbit",
+        cs : {
+            USD: [ 0.03, 0.1, 0.3, 0.9 ],
+            EUR: [ 0.03, 0.1, 0.3, 0.9 ],
+            ARS: [ 2, 5, 20, 100 ],
+            BRL: [ 0.05, 0.5, 4 ],
+            MXN : [ 0.05, 0.5, 4 ]
+        },
+        orl : [ 4,4,7,99,6,6,0,5,2,6,6,99 ],
+        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
         wt  : { mw: 3, bw: 5, mgw: 15, smgw: 35 },
         mxl : 10,
         rtp : [ 96.75, 96.75 ],
-        cpf : {
-            1: {
-                p: 0,
-                bv: 0.25,
-                m: 0.5
-            },
-            2: {
-                p: 1,
-                bv: 0.25,
-                m: 0.5
-            }
-        }
+        
+        mxe : 5000,
+        mxehr: 1000000000,
+        eatk: "bVAQ+3eFrfmDLlPJDem0FmXMn9h+34hG/Nosx/cImGVh7s+1HehvbXGUVNMElhOtwgy5cTHc3qI/jj9RFjVeuKSi4JyTG22tJ6WkFiU6Zj24CCzbPQt9f/MVtcK5cFyi/DSwS9e74oouJKo/+oIwUdpM/yseACt6AUJblj1BkRRRWXhm7K6cCRoBJGCcPPOzIg/T0BV7Gg6njlJgc8FXi8dMhDGay+/u2TLnhmL5rAgxs86S83dXClp0Nvh2/1rX"
     },
-    98: {
-        endpoint: "fortune-ox",
+    "1682240": {
+        endpoint: "cash-mania",
+        cs : {
+            USD: [ 0.08, 0.8, 3, 10 ],
+            EUR: [ 0.08, 0.8, 3, 10 ],
+            ARS: [ 0.08, 0.8, 3, 10 ],
+            BRL: [ 0.08, 0.8, 3, 10 ],
+            MXN : [ 0.08, 0.8, 3, 10 ]
+        },
+        orl : [ 2, 2, 5, 0, 0, 0, 6, 3, 3 ],
+        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
+        wt  : { mw: 5, bw: 15, mgw: 25, smgw: 50 },
+        mxl : 10,
+        rtp : [ 96.75, 96.75 ],
 
+        mxe : 2000,
+        mxehr: 1757469 ,
+        eatk: "bVAQ+3eFrfmDLlPJDem0FmXMn9h+34hG/Nosx/cImGVh7s+1HehvbXGUVNMElhOtwgy5cTHc3qI/jj9RFjVeuKSi4JyTG22tJ6WkFiU6Zj24CCzbPQt9f/MVtcK5cFyi/DSwS9e74oouJKo/+oIwUdpM/yseACt6AUJblj1BkRRRWXhm7K6cCRoBJGCcPPOzIg/T0BV7Gg6njlJgc8FXi8dMhDGay+/u2TLnhmL5rAgxs86S83dXClp0Nvh2/1rX"
+    },
+    "1695365": {
+        endpoint: "fortune-dragon",
+        cs : {
+            USD: [ 0.08, 0.8, 3, 10 ],
+            EUR: [ 0.08, 0.8, 3, 10 ],
+            ARS: [ 0.08, 0.8, 3, 10 ],
+            BRL: [ 0.08, 0.8, 3, 10 ],
+            MXN : [ 0.08, 0.8, 3, 10 ]
+        },
+        orl : [ 2, 2, 5, 0, 0, 0, 6, 3, 3 ],
+        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
+        wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
+        mxl : 5,
+        rtp : [ 96.74, 96.74 ],
+
+        mxe : 2500,
+        mxehr: 500000000,
+        eatk: "bVAQ+3eFrfmDLlPJDem0FmXMn9h+34hG/Nosx/cImGWYo/AVd1pGRUioQseGUOT6mlaV2w0l7ql/l4xy9b5MaDGopYkfIb8vVhkiDv+fXpICMbmqj1JiXBH/+APIpdGhxYRX3wmNdVxLdHBBGkBMgFOxUY68LNCtLWz7I7YAMcrKxwP8EToFYlp6i1uvNLyxqPooikTx1rrhJjvoM81+jBAu5dXPnQVDv+/nSPpedss3zHsc2JeZ4hCQ0xVJnAi0"
     }
 }
 
 export const PAYLINESBYGAME: {[ key: string ] : {[ key: number ]: number[] }} = {
-    1543462: {
+    "1543462": {
         1: [0,4,8], 2: [0,5,8], 3: [0,5,9], 4: [1,5,8], 5: [1,5,9], 
         6: [1,6,9], 7: [1,6,10], 8: [2,6,9], 9: [2,6,10], 10: [ 2,7,10 ]
     },
 }
 
 export const PAYTABLESBYGAME : { [key: string] : { [key: number]: number[] } } = {
-    1543462: {
+    "1543462": {
         0: [200], 2: [100], 3: [50], 4: [10], 5: [5], 6: [3], 7: [2]
     },
 }
 
 export const MULTIPLIER_RULE_BY_GAME : {[ gameCode:string ]: {[ feature: string ]: {[ item: string ] : number[] }}} = {
-    1543462: {
+    "1543462": {
         prize : {
             multipliers : [ 0.5, 1, 2, 3, 5, 8, 10, 12, 15, 18, 20, 25, 30, 35 ],
             rules : [ 0.056, 0.289, 0.457, 0.564, 0.658, 0.736, 0.806, 0.864, 0.902, 0.937, 0.963, 0.982, 0.994, 1 ]
