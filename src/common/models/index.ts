@@ -1,11 +1,12 @@
 import { MongoClient } from 'mongodb';
 import { generateErrorResponse } from '@/api/utill/functions';
-const daily = 86340;
+
 const _SERVERERROR = 501;
 let Users : any;
 let PG2RabbitHistories  : any;
 let PG1OxHistories  : any;
 let PGTigerHistories  : any;
+let PGDragonHistories  : any;
 
 export const connect = async (dbName : string) => {
     try {
@@ -16,9 +17,10 @@ export const connect = async (dbName : string) => {
         const db = client.db(dbName);
         Users = db.collection('Users');
 
-        PG1OxHistories  = db.collection('PG1OxHistories');
-        PGTigerHistories  = db.collection('PGTigerHistories');
+        PG1OxHistories      = db.collection('PG1OxHistories');
+        PGTigerHistories    = db.collection('PGTigerHistories');
         PG2RabbitHistories  = db.collection('PG2RabbitHistories');
+        PGDragonHistories   = db.collection('PGDragonHistories');
 
         return true;
     } catch ( error ) {
@@ -27,14 +29,16 @@ export const connect = async (dbName : string) => {
 };
 
 const selectCollection = ( gameCode:string ) => {
-        switch ( gameCode ) {
-            case "98":
-                return PG1OxHistories;
-            case "126":
-                return PGTigerHistories;
-            case "1543462":
-                return PG2RabbitHistories;
-        }
+    switch ( gameCode ) {
+        case "98":
+            return PG1OxHistories;
+        case "126":
+            return PGTigerHistories;
+        case "1543462":
+            return PG2RabbitHistories;
+        case "1659365":
+            return PG2RabbitHistories;
+    }
 }
 
 /**
@@ -156,31 +160,6 @@ export const getUserInfo = async( token:string, gi:string ) => {
     }
 }
 
-export const getUserInfoByUser = async( gameCode: string, user: string ) => {
-    try {
-        const userInfo = await Users.findOne({
-            "property.user": user,
-            "property.game": gameCode,
-        }, {
-            sort: {_id: -1}
-        });
-        return userInfo;
-    } catch (error) {
-        console.log(`getUserInfoByUser ::`, error);
-    }
-}
-
-export const getUserBalance = async( token:string ) => {
-    try {
-        const user = await Users.findOne( { token:token }, { sort:{_id:-1 }} );
-        if( user===null ) return -100;
-        else return user.balance;
-    } catch (error) {
-        console.log('getUserInfo', error);
-        return -100;
-    }
-}
-
 export const updateUserBalance = async( user : string, newBalance : number ) => {
     try {
         const filter = { "property.user":user };
@@ -264,19 +243,6 @@ export const updateUserInfo = async ( gameCode: string, mgckey: string, userInfo
 /**
  * ResponseManage
  */
-
-export const getGameLogByRoundID = async ( gameCode:string, roundID:number ) => {
-    const collection = selectCollection( gameCode );
-    if( collection===false ) {
-        return generateErrorResponse( 502 )
-    } else {
-        const result = collection.findOne(
-            { roundid : roundID }, 
-            { sort : {_id : -1} }
-        );
-        return result;
-    }
-}
 
 export const saveHistory = async ( historyInfo: any ) => {
     try {
