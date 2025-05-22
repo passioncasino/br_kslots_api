@@ -88,6 +88,7 @@ export const pgGameRouter: Router = (() => {
                 break;
             case "fortune-dragon":
                 response = await fortuneDragonService.handleSpin( actionData );
+                break;
             case "cash-mania":
                 response = await cashManiaService.handleSpin( actionData );
                 break;
