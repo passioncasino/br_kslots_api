@@ -41,26 +41,26 @@ export const getSymbols = ( isFs:boolean ) => {
     }
     let symbols: number[] = [];
     const SYMBOLS = isFs ? REELS.FREESPIN : REELS.NORMAL;
-    console.log(`isFs=${isFs}`);
     for (let ind = 0; ind < 3; ind++) {
-        const rand = isaac.random();
-        const reelRand = Math.floor( rand*SYMBOLS[ind].length );
+        const reelRand = Math.floor( isaac.random()*SYMBOLS[ind].length );
         for( let j=0; j<4; j++ ) {
             symbols.push( SYMBOLS[ind][ (reelRand+j)%SYMBOLS[ind].length ] );
         }
     }
-
     symbols[ 3 ] = symbols[ 11 ] = 99;
 
-    console.log(`symbols=[ ${symbols} ]`);
     if( 
         !isFs &&
-        symbols.filter( (item) => item === money ).length >= 1 &&
-        symbols.filter( (item) => item === money ).length < 3
+        symbols.filter( (item) => item === money ).length >= 1
     ) {
-        const repSymbols = symbols.map(num => (num === 8 || num === 99) ? num : 1);
-        console.log(`repSymbols=[ ${repSymbols} ]`);
-        return repSymbols;
+        const rabbitRand = isaac.random();
+        const isRabbit = rabbitRand < 0.09 ;
+        if( isRabbit ) {
+            const repSymbols = symbols.map(num => (num === 8 || num === 99) ? num : 1);
+            // console.log(`rabbitRand=${rabbitRand}, repSymbols=${repSymbols}`);
+            return repSymbols;
+        }
+        return symbols;
     } else {
         return symbols;
     }

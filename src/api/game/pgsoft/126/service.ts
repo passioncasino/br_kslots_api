@@ -15,6 +15,7 @@ export const fortuneTigerService = {
         const rtp = userInfo.property.rtp;
         const now = GlobalFunctions.getCurrentTime();
         const betCoin = Math.round( userInfo.gameStatus.coin*ml*100 )/100;
+        if ((userInfo.balance - 10 * betCoin) < 0) return GlobalFunctions.generatePGError( 500, actionData.traceId );
 
         const symbolsInfo = Functions.getSymbolInfo( rtp, userInfo.gameStatus.isFWS, userInfo.gameStatus.fws, userInfo.gameStatus.fwsSymbols );
         const scoreInfo = GlobalFunctions.checkScoreLine(symbolsInfo.symbols, GAMECODE, 0);

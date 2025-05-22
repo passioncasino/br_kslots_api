@@ -74,6 +74,8 @@ export const pgGameRouter: Router = (() => {
         // console.log(`spin endpoint=${endpoint}`);
         let response: any = {};
         const actionData : PGActionType = req.body;
+        actionData.traceId = req.params.traceId;
+        
         switch (endpoint) {
             case "fortune-tiger":
                 response = await fortuneTigerService.handleSpin( actionData );

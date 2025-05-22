@@ -641,3 +641,16 @@ export const generateResourcesTypeIds = async() => {
     };
     return response;    
 }
+
+export const generatePGError = ( error:number, tid:string ) => {
+    const res = {
+        dt: null,
+        err: {
+            cd: "1105",
+            msg: "Internal server error.",
+            tid: tid,
+            at: null
+        }
+    };
+    return res;
+}

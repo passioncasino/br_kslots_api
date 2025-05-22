@@ -1,21 +1,20 @@
 import { getUserInfo, saveHistory, updateUserInfo, updateUserBalance, updateSequenceHistory } from '@/common/models';
-import { getCurrentTime, generatePgNextId, generateRoundNo } from '@/api/utill/functions';
-import { PGActionType, PGScoreProps, PGSpinParamType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
+import { getCurrentTime, generateRoundNo, generatePGError } from '@/api/utill/functions';
+import { PGActionType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
 import { getGameInfo, generateSpinResponse } from './function';
+
 export const fortuneOxService = {
     handleSpin: async ( actionData: PGActionType ) => {
         const GAMECODE = "98";
         const userInfo = await getUserInfo( actionData.atk, GAMECODE );
 
-        const isFunMode = userInfo.property.mode === 0 ? true : false;
-        const rtp = userInfo.property.rtp;
         const now = getCurrentTime();
         const ml = Number(actionData.ml);
         const cs = Number(actionData.cs);
         const betCoin = Math.round(cs * ml * 100) / 100;
         userInfo.gameStatus.coin = Number(actionData.cs);
 
-        // if ((userInfo.balance - 10 * betCoin) < 0) return GlobalConstants.ERRORSTRING[1];
+        if ((userInfo.balance - 10 * betCoin) < 0) return generatePGError( 500, actionData.traceId );
         if (!userInfo.gameStatus.isFWS) userInfo.balance = Math.round(100 * userInfo.balance - 1000 * betCoin) / 100;
 
         const gameInfo = getGameInfo( userInfo.gameStatus.isFWS, betCoin );

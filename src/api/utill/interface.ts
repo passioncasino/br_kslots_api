@@ -24,6 +24,7 @@ export interface PGActionType {
     btt : number
     atk : string
     fb : number
+    traceId : string
 }
 
 export interface PGScoreProps {

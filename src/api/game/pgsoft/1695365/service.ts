@@ -15,13 +15,14 @@ export const fortuneDragonService = {
         const ml = Number(actionData.ml);
         const cs = Number(actionData.cs);
         const betCoin = Math.round( cs * ml * 100 )/100;
+        let bcCoin = betCoin;
+        if (Number(actionData.fb) === 2) bcCoin = 5 * betCoin;
+        if( userInfo.balance<5*bcCoin ) return GlobalFunctions.generatePGError( 500, actionData.traceId );
 
         let twMoney = 0;
         let limitFlag = false;
-        let bcCoin = betCoin;
         userInfo.gameStatus.coin = cs;
         
-        if (Number(actionData.fb) === 2) bcCoin = 5 * betCoin;
         if (userInfo.gameStatus.twMoney !== 0) userInfo.gameStatus.cwc++;
         else userInfo.gameStatus.cwc = 0;
         

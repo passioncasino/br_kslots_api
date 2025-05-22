@@ -1,4 +1,4 @@
-import { generatePgNextId, getCurrentTime, generateRoundNo } from '@/api/utill/functions';
+import { generatePgNextId, getCurrentTime, generateRoundNo, generatePGError } from '@/api/utill/functions';
 import { getUserInfo, updateUserInfo, updateUserBalance, saveHistory, updateSequenceHistory } from '@/common/models';
 import { PGActionType, PGScoreProps, PGSpinParamType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
 import { getSymbols, checkScoreLine, getPrizeInfo, generateSpinResponse } from './function';
@@ -30,7 +30,7 @@ export const fortuneRabbitService = {
             userInfo.gameStatus.coin = Number(actionData.cs) * Number(actionData.ml);
         }
         const stake = userInfo.gameStatus.coin*10; // 1 ;
-
+        if( userInfo.balance<stake ) return generatePGError( 500, actionData.traceId );
         const symbols = getSymbols( userInfo.gameStatus.isFs );
         const isRabbit = symbols.filter( (item) => item === 1 ).length >= 8;
 
