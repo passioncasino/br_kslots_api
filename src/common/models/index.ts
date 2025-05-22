@@ -3,10 +3,11 @@ import { generateErrorResponse } from '@/api/utill/functions';
 
 const _SERVERERROR = 501;
 let Users : any;
+let PG1OxHistories      : any;
+let PGTigerHistories    : any;
+let PGDragonHistories   : any;
 let PG2RabbitHistories  : any;
-let PG1OxHistories  : any;
-let PGTigerHistories  : any;
-let PGDragonHistories  : any;
+let PGCashManiaHistories   : any;
 
 export const connect = async (dbName : string) => {
     try {
@@ -19,8 +20,9 @@ export const connect = async (dbName : string) => {
 
         PG1OxHistories      = db.collection('PG1OxHistories');
         PGTigerHistories    = db.collection('PGTigerHistories');
-        PG2RabbitHistories  = db.collection('PG2RabbitHistories');
         PGDragonHistories   = db.collection('PGDragonHistories');
+        PG2RabbitHistories  = db.collection('PG2RabbitHistories');
+        PGCashManiaHistories   = db.collection('PGCashManiaHistories');
 
         return true;
     } catch ( error ) {
@@ -37,7 +39,9 @@ const selectCollection = ( gameCode:string ) => {
         case "1543462":
             return PG2RabbitHistories;
         case "1695365":
-            return PG2RabbitHistories;
+            return PGDragonHistories;
+        case "1682240":
+            return PGCashManiaHistories;
     }
 }
 

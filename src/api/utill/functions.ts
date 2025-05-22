@@ -19,7 +19,7 @@ export const validateProviderParams = ( params : LauncherType ) => {
 }
 
 export const getCurrentTime = () => {
-    return new Date().getTime();
+    return Date.now();
 }
 
 export const generateRandomString = ( length:number, type:number ) => {
@@ -163,7 +163,6 @@ export function getKeyByEndpoint(endpoint: string): number {
   }
 
 export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string, traceId:string ) => {
-    if( gi==="1682240" ) gi="98";
     const userInfo = await Models.getUserInfo( otk, gi );
     if (userInfo === null) {
         const errorResponse = {
@@ -485,19 +484,69 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         orl: gameInfo.orl,
         fs: null,
         mf: {
-            "mt": [
+            mt: [
                 2
             ],
-            "ms": [
+            ms: [
                 true
             ],
-            "mi": [
+            mi: [
                 0
             ]
         },
         ssaw: 0,
         crtw: 0,
         imw: false,
+        gwt: 0,
+        ctw: 0,
+        pmt: null,
+        cwc: 0,
+        fstc: null,
+        pcwc: 0,
+        rwsp: null,
+        hashr: null,
+        fb: null,
+        ab: null,
+        ml: gameInfo.ml[0],
+        cs: csInfo[0],
+        rl: gameInfo.orl,
+        sid: "0",
+        psid: "0",
+        st: 1,
+        nst: 1,
+        pf: 0,
+        aw: 0,
+        wid: 0,
+        wt: "C",
+        wk: "0_C",
+        wbn: null,
+        wfg: null,
+        blb: 0,
+        blab: 0,
+        bl: userInfo.balance,
+        tb: 0,
+        tbb: 0,
+        tw: 0,
+        np: 0,
+        ocr: null,
+        mr: null,
+        ge: null
+    }
+
+    const cashResp = {
+        wp: null,
+        lw: null,
+        twbm: 0,
+        fs: null,
+        imw: false,
+        rv: [
+            0.5, 50, 2.5, 1, 0, 100, 50, 5, 25
+        ],
+        orl: null,
+        orv: null,
+        rsrl: null,
+        rsrv: null,
+        nfp: null,
         gwt: 0,
         ctw: 0,
         pmt: null,
@@ -561,6 +610,9 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             break;
         case "1543462":
             gameInfoResponse.dt.ls = { si: rabbitResp };
+            break;
+        case "1682240":
+            gameInfoResponse.dt.ls = { si: cashResp };
             break;
         case "1695365":
             gameInfoResponse.dt.ls = { si: dragonResp };

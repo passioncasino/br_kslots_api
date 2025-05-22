@@ -7,6 +7,7 @@ import { fortuneRabbitService } from "@/api/game/pgsoft/1543462/service";
 import { fortuneOxService } from "@/api/game/pgsoft/98/service";
 import { fortuneTigerService } from "@/api/game/pgsoft/126/service";
 import { fortuneDragonService } from "@/api/game/pgsoft/1695365/service";
+import { cashManiaService } from "@/api/game/pgsoft/1682240/service";
 
 export const gameRouter: Router = (() => {
     const router = express.Router();
@@ -85,6 +86,8 @@ export const pgGameRouter: Router = (() => {
                 break;
             case "fortune-dragon":
                 response = await fortuneDragonService.handleSpin( actionData );
+            case "cash-mania":
+                response = await cashManiaService.handleSpin( actionData );
                 break;
         }
         res.json(response);
