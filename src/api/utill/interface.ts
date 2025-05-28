@@ -15,39 +15,6 @@ export interface LauncherType {
     maxBet : number
 }
 
-export interface PGActionType {
-    cs : number
-    ml : number
-    pf : number
-    id : string
-    wk : string
-    btt : number
-    atk : string
-    fb : number
-    traceId : string
-}
-
-export interface PGScoreProps {
-    gameCode : string
-    symbols: number[]
-    stake: number
-    wild: number
-}
-export interface PGSpinParamType {
-    symbols: number[]
-    actionData: PGActionType
-    scoreInfo: any[]
-    prizes: number[]
-    cptw: number
-    stake: number
-    ctw: number
-    spinProfit: number
-    nextId: string
-    isFs: boolean
-    fsCnt: number
-    fsProfit: number
-    balance: number
-}
 export interface HistoryType {
     roundid: string
     user : string
@@ -74,6 +41,51 @@ export interface SequenceHistoryType {
     response : object | string
 }
 
+export interface IPayVal {
+    symbol: number
+    profit: number
+    line : number
+    sameCount: number
+}
+/**
+ * Types for PG SOFT
+ */
+
+export interface IPGSpinParamType {
+    symbols: number[]
+    actionData: PGActionType
+    scoreInfo: any[]
+    prizes: number[]
+    cptw: number
+    stake: number
+    ctw: number
+    spinProfit: number
+    nextId: string
+    isFs: boolean
+    fsCnt: number
+    fsProfit: number
+    balance: number
+}
+
+export interface PGActionType {
+    cs : number
+    ml : number
+    pf : number
+    id : string
+    wk : string
+    btt : number
+    atk : string
+    fb : number
+    traceId : string
+}
+
+export interface PGScoreProps {
+    gameCode : string
+    symbols: number[]
+    stake: number
+    wild: number
+}
+
 export interface SpinType {
     ml: number
     pf: number
@@ -87,6 +99,12 @@ export interface SpinType {
     isFWS: boolean
     fwsCnt: number
     fsWinMoney: number
+}
+
+export interface IPGwinning {
+    scoreInfo: any[]
+    stake: number
+    gameCode: string
 }
 
 export interface CpfType {

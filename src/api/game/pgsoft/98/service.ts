@@ -1,7 +1,8 @@
 import { getUserInfo, saveHistory, updateUserInfo, updateUserBalance, updateSequenceHistory } from '@/common/models';
-import { getCurrentTime, generateRoundNo, generatePGError } from '@/api/utill/functions';
+import { getCurrentTime, generateRoundNo } from '@/api/utill/functions';
 import { PGActionType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
 import { getGameInfo, generateSpinResponse } from './function';
+import { generatePGError, generatePgNextId } from '../pgFunctions';
 
 export const fortuneOxService = {
     handleSpin: async ( actionData: PGActionType ) => {
@@ -47,10 +48,10 @@ export const fortuneOxService = {
             },
             err: null
         }
-        const roundid = generateRoundNo( now, GAMECODE );
+        const nextId = generatePgNextId();
         const historyInfo : HistoryType = {
             gameCode : GAMECODE, 
-            roundid : roundid, 
+            roundid : nextId, 
             user : userInfo.property.user,
             balance : 0,
             currency : userInfo.property.currency,
@@ -62,7 +63,7 @@ export const fortuneOxService = {
 
         if (userInfo.gameStatus.isFWS) {            
             if (userInfo.gameStatus.fwsCnt === 0) {
-                userInfo.property.lastId = roundid;
+                userInfo.property.lastId = nextId;
                 await saveHistory( historyInfo );
             } else {
                 const sequenceHistoryInfo : SequenceHistoryType = {

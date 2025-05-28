@@ -1,7 +1,8 @@
-import { generatePgNextId, getCurrentTime, generateRoundNo, generatePGError } from '@/api/utill/functions';
+import { getCurrentTime, generateRoundNo } from '@/api/utill/functions';
 import { getUserInfo, updateUserInfo, updateUserBalance, saveHistory, updateSequenceHistory } from '@/common/models';
-import { PGActionType, PGScoreProps, PGSpinParamType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
+import { PGActionType, PGScoreProps, IPGSpinParamType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
 import { getSymbols, checkScoreLine, getPrizeInfo, generateSpinResponse } from './function';
+import { generatePgNextId, generatePGError } from '../pgFunctions';
 
 export const fortuneRabbitService = {
     handleSpin: async ( actionData: PGActionType ) => {
@@ -10,20 +11,14 @@ export const fortuneRabbitService = {
         let isBalance = false;
         const userInfo = await getUserInfo( actionData.atk, GAMECODE );
         
-        // if( userInfo === null ) {
-        // }
         if( 
             ( userInfo.gameStatus.sid!=="0" &&  
             userInfo.gameStatus.sid !== actionData.id ) || 
             (actionData.id === "0" &&
             userInfo.gameStatus.id === "0")
         ) {
-            let res = {
-                cd: "1201",
-                msg: "GameStateNotFoundException",
-                tid: "PSEAVD18",
-                at: null
-            };
+            const res = generatePGError( 1201, actionData.traceId );
+            return res;
         }
 
         if( userInfo.gameStatus.coin !== Number(actionData.cs) * Number(actionData.ml)) {
@@ -59,7 +54,7 @@ export const fortuneRabbitService = {
         const nextId = generatePgNextId();
         userInfo.gameStatus.sid = nextId;
         
-        const params: PGSpinParamType = {
+        const params: IPGSpinParamType = {
             symbols,
             actionData,
             scoreInfo,

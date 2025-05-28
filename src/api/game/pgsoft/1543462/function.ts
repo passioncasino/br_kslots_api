@@ -1,7 +1,8 @@
 import isaac from 'isaac';
-import { PGSpinParamType, PGScoreProps } from "@/api/utill/interface";
+import { IPGSpinParamType, PGScoreProps, IPGwinning } from "@/api/utill/interface";
 import { PAYLINESBYGAME, PAYTABLESBYGAME } from "@/api/utill/constants";
 import { getIdxByRand } from '@/api/utill/functions';
+import { generatePGWinningInfo } from '../pgFunctions';
 
 interface cpf {
     p: number
@@ -151,21 +152,6 @@ const getCPF = ( stake: number, symbols: number[], prizes:number[] ) => {
     return cpfs;
 }
 
-const generateWPandLW = ( scoreInfo: any[], stake: number ) => {
-    let wpInfo: any = {};
-    let lwInfo: any = {};
-    let rwspInfo: any = {};
-    if( scoreInfo.length === 0 ) return { wpInfo: null, lwInfo: null, rwspInfo: null };
-    else {
-        scoreInfo.forEach( ( item:any ) => {
-            wpInfo[ item.line ] = PAYLINESBYGAME[GAMECODE][ item.line ];
-            lwInfo[ item.line ] = item.profit;
-            rwspInfo[ item.line ] = item.profit*10 / stake;
-        })
-        return { wpInfo, lwInfo, rwspInfo };
-    }
-}
-
 const generateFs = ( fsCnt:number, fsProfit:number ) => {
     const fs: fs = {
         aw: fsProfit,
@@ -180,9 +166,14 @@ const generateFstc = ( fsCnt:number ) => {
     return fstc;
 }
 
-export const generateSpinResponse = ( params: PGSpinParamType ) => {
+export const generateSpinResponse = ( params: IPGSpinParamType ) => {
     const cpfs = getCPF( params.stake, params.symbols, params.prizes );
-    const { wpInfo, lwInfo, rwspInfo } = generateWPandLW( params.scoreInfo, params.stake );
+    const wpParams : IPGwinning = {
+        scoreInfo: params.scoreInfo,
+        stake: params.stake,
+        gameCode: GAMECODE
+    }
+    const { wpInfo, lwInfo, rwspInfo } = generatePGWinningInfo( wpParams );
     const moneyWin = params.cptw > 0; 
     let profit = params.ctw + params.cptw;
     let fs: any = null;

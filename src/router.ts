@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import { getUserInfo  } from '@/common/models';
-import { getKeyByEndpoint } from '@/api/utill/functions';
+import { getKeyByEndpoint } from '@/api/game/pgsoft/pgFunctions';
 import { commonService, pgSoftService } from '@/api/game/commonService';
 import { LauncherType, PGActionType } from '@/api/utill/interface';
 import { fortuneRabbitService } from "@/api/game/pgsoft/1543462/service";
@@ -69,12 +69,11 @@ export const pgWebRouter: Router = (() => {
 
 export const pgGameRouter: Router = (() => {
     const router = express.Router();
-    router.post('/:endpoint/v2/Spin', async (req: Request, res: Response) => {
+    router.post('/:endpoint/v2/Spin', async ( req: Request, res: Response ) => {
         const endpoint = req.params.endpoint;
-        // console.log(`spin endpoint=${endpoint}`);
         let response: any = {};
         const actionData : PGActionType = req.body;
-        actionData.traceId = req.params.traceId;
+        actionData.traceId = req.query.traceId as string;
         
         switch (endpoint) {
             case "fortune-tiger":

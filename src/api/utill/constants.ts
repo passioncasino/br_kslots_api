@@ -62,12 +62,13 @@ export const PGGAMEINFO: { [key:string] : any } = {
             USD: [ 0.05, 0.5, 4 ],
             EUR: [ 0.05, 0.5, 4 ],
             ARS: [ 0.05, 0.5, 4 ],
-            BRL: [ 0.05, 0.5, 4 ],
+            BRL: [ 0.03, 0.1, 0.3, 0.9 ],
             MXN : [ 0.05, 0.5, 4 ]
         },
         orl : [ 1,5,2,12,0,11,5,3,4 ],
         ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
-        wt  : { mw: 5, bw: 15, mgw: 25, smgw: 50 },
+        wt  : { mw: 3, bw: 5, mgw: 15, smgw: 35 },
+        // wt  : { mw: 5, bw: 15, mgw: 25, smgw: 50 },
         mxl : 10,
         rtp : [ 96.75, 96.75 ],
 
@@ -97,17 +98,16 @@ export const PGGAMEINFO: { [key:string] : any } = {
 }
 
 export const PAYLINESBYGAME: {[ key: string ] : {[ key: number ]: number[] }} = {
-    "126" : {
-        1 : [ 1, 4, 7 ],
-        2 : [ 0, 3, 6 ],
-        3 : [ 2, 5, 8 ],
-        4 : [ 0, 4, 8 ],
-        5 : [ 2, 4, 6 ],
+    126 : {
+        1 : [ 1, 4, 7 ], 2 : [ 0, 3, 6 ], 3 : [ 2, 5, 8 ], 4 : [ 0, 4, 8 ], 5 : [ 2, 4, 6 ],
     },
-    "1543462": {
+    1543462: {
         1: [0,4,8], 2: [0,5,8], 3: [0,5,9], 4: [1,5,8], 5: [1,5,9], 
         6: [1,6,9], 7: [1,6,10], 8: [2,6,9], 9: [2,6,10], 10: [ 2,7,10 ]
     },
+    1682240: {
+        1: [ 1,4,7 ]
+    }
 }
 
 export const PAYTABLESBYGAME : { [key: string] : { [key: number]: number[] } } = {
@@ -120,11 +120,17 @@ export const PAYTABLESBYGAME : { [key: string] : { [key: number]: number[] } } =
 }
 
 export const MULTIPLIER_RULE_BY_GAME : {[ gameCode:string ]: {[ feature: string ]: {[ item: string ] : number[] }}} = {
-    "1543462": {
+    1543462: {
         prize : {
             multipliers : [ 0.5, 1, 2, 5, 10, 20, 30, 50, 100, 500 ],
             rules : [ 0.5492, 0.6545, 0.6796, 0.9089, 0.9718, 0.9841, 0.9868, 0.9994, 0.9999, 1 ]
         }
+    },
+    1682240: {
+        bank: {
+            multipliers : [ 2, 3, 5, 6, 10, 15, 20, 30, 40, 50, 100 ],
+            rules : [ 0.127, 0.4991, 0.5668, 0.7795, 0.8292, 0.8777, 0.9241, 0.9707, 0.9941, 1 ]
+        },
     }
 }
 

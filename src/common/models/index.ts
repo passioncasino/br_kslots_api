@@ -84,6 +84,17 @@ const initUserInfo = ( userInfo:any ) => {
                 fsProfit : 0
             };            
             break;
+        case "1682240" :
+            userInfo["gameStatus"] = {
+                coin : 0.03,
+                sid : "0",
+                isFs : false,
+                fsType: 0,
+                fsCnt : -1,
+                fsMaxCnt : 0,
+                fsProfit : 0
+            }
+            break;
     }
     return userInfo;
 }
@@ -235,7 +246,25 @@ export const updateUserInfo = async ( gameCode: string, mgckey: string, userInfo
                     }
                 );
                 return (pg2.modifiedCount>0 && pg2.matchedCount===1) ? 1 : 0;
-
+            case "1682240" :
+                const pg6 = await Users.updateOne(
+                    { token: mgckey, "property.game" : gameCode },
+                    {
+                        $set : {
+                            "property.lastId" : userInfo.property.lastId,
+                            gameStatus : {
+                                coin : userInfo.gameStatus.coin,
+                                sid: userInfo.gameStatus.sid,
+                                isFs: userInfo.gameStatus.isFs,
+                                fsType: userInfo.gameStatus.fsType,
+                                fsCnt: userInfo.gameStatus.fsCnt,
+                                fsMaxCnt: userInfo.gameStatus.fsMaxCnt,
+                                fsProfit: userInfo.gameStatus.fsProfit,
+                            }
+                        }
+                    }
+                );
+                return (pg6.modifiedCount>0 && pg6.matchedCount===1) ? 1 : 0;
         }
 
     } catch (error) {

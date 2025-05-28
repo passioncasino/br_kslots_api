@@ -3,6 +3,7 @@ import * as GlobalConstants from '@/api/utill/constants';
 import * as GlobalFunctions from '@/api/utill/functions';
 import * as Models from '@/common/models';
 import * as Functions from '@/api/game/pgsoft/1695365/function';
+import { generatePgNextId, generatePGError } from '@/api/game/pgsoft/pgFunctions';
 
 export const fortuneDragonService = {
     handleSpin: async (actionData: GlobalTypes.PGActionType) => {
@@ -11,13 +12,12 @@ export const fortuneDragonService = {
         if (userInfo === null) return GlobalConstants.ERRORSTRING[6];
 
         const rtp = userInfo.property.rtp;        
-        const now = GlobalFunctions.getCurrentTime();
         const ml = Number(actionData.ml);
         const cs = Number(actionData.cs);
         const betCoin = Math.round( cs * ml * 100 )/100;
         let bcCoin = betCoin;
         if (Number(actionData.fb) === 2) bcCoin = 5 * betCoin;
-        if( userInfo.balance<5*bcCoin ) return GlobalFunctions.generatePGError( 500, actionData.traceId );
+        if( userInfo.balance<5*bcCoin ) return generatePGError( 500, actionData.traceId );
 
         let twMoney = 0;
         let limitFlag = false;
@@ -29,7 +29,7 @@ export const fortuneDragonService = {
         if( ( userInfo.balance - 5 * bcCoin ) < 0 ) return GlobalConstants.ERRORSTRING[ 1 ];
         if (!userInfo.gameStatus.isFWS) userInfo.balance = Math.round(100 * userInfo.balance - 500 * bcCoin) / 100;
 
-        const gameInfo = Functions.getGameInfo(rtp, userInfo.gameStatus.isFWS, betCoin, actionData.fb);
+        const gameInfo = Functions.getGameInfo( userInfo.gameStatus.isFWS, betCoin, actionData.fb);
         if (gameInfo.mulInfo.it) {
             userInfo.gameStatus.isFWS = true;
             if (userInfo.gameStatus.fwsCnt === -1) userInfo.gameStatus.fwsCnt = 1;
@@ -65,7 +65,7 @@ export const fortuneDragonService = {
             },
             err: null
         };
-        const roundid = GlobalFunctions.generateRoundNo( now, GAMECODE );
+        const roundid = generatePgNextId();
         const historyInfo : GlobalTypes.HistoryType = {
             gameCode : GAMECODE, 
             roundid : roundid, 

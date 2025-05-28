@@ -85,7 +85,7 @@ export const pgSoftService = {
      */
 
     verifyOperatorPlayerSession : async( otk:string, gi:string, traceId:string ) => {
-        const response = GlobalFunctions.generateVerifyOperatorPlayerSession( otk, gi, traceId );
+        const response = PGFunctions.generateVerifyOperatorPlayerSession( otk, gi, traceId );
         return response;
     },
 
@@ -106,12 +106,12 @@ export const pgSoftService = {
     },
 
     getGameRule : async( gid:string ) => {
-        const response = GlobalFunctions.generateGameRule( gid );
+        const response = PGFunctions.generateGameRule( gid );
         return response;
     },
 
     getByResourcesTypeIds : async() => {
-        const response = GlobalFunctions.generateResourcesTypeIds();
+        const response = PGFunctions.generateResourcesTypeIds();
         return response;
     },
 
@@ -123,7 +123,7 @@ export const pgSoftService = {
     getGameInfo : async( atk:string, gameCode:string ) => {
         const useInfo = await Models.getUserInfo( atk, gameCode );
         await Models.updateUserInfo( gameCode, atk, useInfo );
-        const response = await GlobalFunctions.generateGameInfo( atk, gameCode );
+        const response = await PGFunctions.generateGameInfo( atk, gameCode );
         return response;
     },
 

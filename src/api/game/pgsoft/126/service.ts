@@ -3,6 +3,7 @@ import * as GlobalConstants from '@/api/utill/constants';
 import * as GlobalFunctions from '@/api/utill/functions';
 import * as Models from '@/common/models';
 import * as Functions from './function';
+import { generatePgNextId, generatePGError } from '@/api/game/pgsoft/pgFunctions';
 
 export const fortuneTigerService = {
     handleSpin: async (actionData: GlobalTypes.PGActionType) => {
@@ -15,7 +16,7 @@ export const fortuneTigerService = {
         const rtp = userInfo.property.rtp;
         const now = GlobalFunctions.getCurrentTime();
         const betCoin = Math.round( userInfo.gameStatus.coin*ml*100 )/100;
-        if ((userInfo.balance - 10 * betCoin) < 0) return GlobalFunctions.generatePGError( 500, actionData.traceId );
+        if ((userInfo.balance - 10 * betCoin) < 0) return generatePGError( 500, actionData.traceId );
 
         const symbolsInfo = Functions.getSymbolInfo( rtp, userInfo.gameStatus.isFWS, userInfo.gameStatus.fws, userInfo.gameStatus.fwsSymbols );
         const scoreInfo = GlobalFunctions.checkScoreLine(symbolsInfo.symbols, GAMECODE, 0);
@@ -47,7 +48,6 @@ export const fortuneTigerService = {
             if( userInfo.gameStatus.fwsCnt === 0) userInfo.balance = Math.round( userInfo.balance*100-betCoin*1000 ) / 100;
         }
         const spinProfit = userInfo.gameStatus.isFWS ? 0 : lineProfit;
-        const roundid = GlobalFunctions.generateRoundNo( now, GAMECODE );
 
         const spinParams : any = {
             ml : ml,
@@ -72,6 +72,8 @@ export const fortuneTigerService = {
             },
             err: null
         }
+
+        const roundid = generatePgNextId();
         const historyInfo : GlobalTypes.HistoryType = {
             gameCode : GAMECODE, 
             roundid : roundid, 
