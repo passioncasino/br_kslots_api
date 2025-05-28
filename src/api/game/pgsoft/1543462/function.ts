@@ -209,7 +209,7 @@ export const generateSpinResponse = ( params: IPGSpinParamType ) => {
     } else {
         blb = params.balance;
         blab = Math.round( params.balance*100 - params.stake*100 ) / 100;
-        bl = Math.round( blab*100 + params.fsProfit*100 ) / 100;
+        bl = Math.round( blab*100 + params.spinProfit*100 ) / 100;
     }
     const spinResponse = {
         wp: wpInfo,

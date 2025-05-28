@@ -141,5 +141,3 @@ export const compareArray = ( arr1:number[], arr2:number[] ) => {
     }
     return true;
 }
-
-
