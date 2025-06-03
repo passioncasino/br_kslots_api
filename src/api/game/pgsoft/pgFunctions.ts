@@ -328,6 +328,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.wc = 0;
             resp.gwt = 0;
             resp.pf = 0;
+            gameInfoResponse.dt.maxwm = null;
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "126":
@@ -376,6 +377,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.orl = gameInfo.orl;
             resp.gm = 1;
             resp.it = false;
+            resp.fs = null;
             resp.mf = {
                 mt: [ 2 ],
                 ms: [ true ],
@@ -383,6 +385,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             };
             resp.ssaw = 0;
             resp.crtw = 0;
+            resp.imw  = 0;
             resp.gwt  = 0;
             resp.pf   = 0;
             resp.ge   = null;
