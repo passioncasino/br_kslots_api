@@ -262,9 +262,9 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
     const resp: any = {
         wp: null,
         lw: null,
-        orl: gameInfo.orl,
-        imw: false,
-        fs: null,
+        // orl: gameInfo.orl,
+        // imw: false,
+        // fs: null,
         gwt: -1,
         ctw: 0,
         pmt: null,
@@ -298,7 +298,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         np: 0,
         ocr: null,
         mr: null,
-        ge: [ 1, 11 ]
+        ge: null
     };
 
     const gameInfoResponse: any = {
@@ -309,7 +309,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             gcs: {},
             abm: null,
             cs: csInfo,
-            ml: gameInfo.ml,
+            ml: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
             mxl: gameInfo.mxl,
             bl: userInfo.balance,
             inwe: false,
@@ -321,18 +321,20 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
 
     switch ( gi ) {
         case "98":
-            // orl, imw
+            resp.fs = null;
             resp.rf = false;
-            resp.rtp = false;
+            resp.rtf = false;
             resp.fs = false;
             resp.rc = 0;
             resp.im = false;
             resp.itw = false;
             resp.wc = 0;
+            resp.gwt = -1;
+            resp.pf = 1;
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "126":
-            // fs, imw
+            resp.imw  = false;
             resp.wc  = 3;
             resp.ist = false;
             resp.itw = false;
@@ -343,6 +345,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.gwt = 0;
             resp.pf  = 0;
             resp.ge  = null;
+            gameInfoResponse.dt.maxwm = 5000;
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "1543462":
@@ -351,6 +354,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.cpf = {};
             resp.cptw = 0;
             resp.crtw = 0;
+            resp.ge = [ 1, 11 ];
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "1682240":

@@ -9,7 +9,6 @@ export const PGGAMEINFO: { [key:string] : any } = {
             MXN : [ 0.05, 0.5, 4 ]
         },
         orl : [ 2, 2, 2, 99, 0, 0, 0, 0, 3, 3, 3, 99 ],
-        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
         wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
         mxl : 10,
         rtp : [ 96.75, 96.75 ],
@@ -28,9 +27,8 @@ export const PGGAMEINFO: { [key:string] : any } = {
             MXN : [ 0.08, 0.8, 3, 10 ]
         },
         orl : [ 2, 2, 5, 0, 0, 0, 6, 3, 3 ],
-        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
         wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
-        mxl : 10,
+        mxl : 5,
         rtp : [ 96.81, 96.81 ],
 
         mxe : 2500,
@@ -47,8 +45,7 @@ export const PGGAMEINFO: { [key:string] : any } = {
             MXN : [ 0.05, 0.5, 4 ]
         },
         orl : [ 4,4,7,99,6,6,0,5,2,6,6,99 ],
-        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
-        wt  : { mw: 3, bw: 5, mgw: 15, smgw: 35 },
+        wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
         mxl : 10,
         rtp : [ 96.75, 96.75 ],
         
@@ -66,7 +63,6 @@ export const PGGAMEINFO: { [key:string] : any } = {
             MXN : [ 0.05, 0.5, 4 ]
         },
         orl : [ 1,5,2,12,0,11,5,3,4 ],
-        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
         wt  : { mw: 3, bw: 5, mgw: 15, smgw: 35 },
         // wt  : { mw: 5, bw: 15, mgw: 25, smgw: 50 },
         mxl : 10,
@@ -86,7 +82,6 @@ export const PGGAMEINFO: { [key:string] : any } = {
             MXN : [ 0.08, 0.8, 3, 10 ]
         },
         orl : [ 2, 2, 5, 0, 0, 0, 6, 3, 3 ],
-        ml  : [ 1, 2, 3 ,4, 5, 6, 7, 8 ,9, 10  ],
         wt  : { mw: 5, bw: 20, mgw: 35, smgw: 50 },
         mxl : 5,
         rtp : [ 96.74, 96.74 ],
