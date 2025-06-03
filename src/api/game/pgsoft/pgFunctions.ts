@@ -275,7 +275,7 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
         hashr: null,
         fb: null,
         ab: null,
-        ml: gameInfo.ml[0],
+        ml: 2,
         cs: csInfo[0],
         rl: gameInfo.orl,
         sid: "0",
