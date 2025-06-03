@@ -262,9 +262,6 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
     const resp: any = {
         wp: null,
         lw: null,
-        // orl: gameInfo.orl,
-        // imw: false,
-        // fs: null,
         gwt: -1,
         ctw: 0,
         pmt: null,
@@ -329,12 +326,11 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.im = false;
             resp.itw = false;
             resp.wc = 0;
-            resp.gwt = -1;
-            resp.pf = 1;
+            resp.gwt = 0;
+            resp.pf = 0;
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "126":
-            resp.imw  = false;
             resp.wc  = 3;
             resp.ist = false;
             resp.itw = false;
@@ -345,20 +341,25 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.gwt = 0;
             resp.pf  = 0;
             resp.ge  = null;
-            gameInfoResponse.dt.maxwm = 5000;
+            gameInfoResponse.dt.maxwm = null;
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "1543462":
+            resp.orl = gameInfo.orl;
             resp.ift = false;
             resp.iff = false;
             resp.cpf = {};
             resp.cptw = 0;
             resp.crtw = 0;
+            resp.imw = false;
+            resp.fs = null;
             resp.ge = [ 1, 11 ];
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "1682240":
             resp.twbm = 0;
+            resp.fs   = null;
+            resp.imw  = false;
             resp.orl  = null;
             resp.rv   = [ 0.6, 60, 3, 1, 0, 100, 60, 6, 30 ];
             resp.orv  = null;
@@ -367,11 +368,12 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.nfp  = null;
             resp.ml   = 2;
             resp.gwt  = 0;
-            resp.pf   = 1;
+            resp.pf   = 0;
             resp.ge   = null;
             gameInfoResponse.dt.ls = { si: resp };
             break;
         case "1695365":
+            resp.orl = gameInfo.orl;
             resp.gm = 1;
             resp.it = false;
             resp.mf = {
@@ -384,6 +386,17 @@ export const generateGameInfo = async( atk:string, gi:string ) => {
             resp.gwt  = 0;
             resp.pf   = 0;
             resp.ge   = null;
+            gameInfoResponse.dt.fb = {
+                is: true,
+                bm: 5,
+                t: 500
+            };
+            gameInfoResponse.dt.maxwm = 2500;
+            gameInfoResponse.dt.gcs.bf = {
+                is: true,
+                bm: 5,
+                t: 500
+            };
             gameInfoResponse.dt.ls = { si: resp };
             break;
     }

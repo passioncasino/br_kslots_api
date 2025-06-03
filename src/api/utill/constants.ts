@@ -63,8 +63,7 @@ export const PGGAMEINFO: { [key:string] : any } = {
             MXN : [ 0.05, 0.5, 4 ]
         },
         orl : [ 1,5,2,12,0,11,5,3,4 ],
-        wt  : { mw: 3, bw: 5, mgw: 15, smgw: 35 },
-        // wt  : { mw: 5, bw: 15, mgw: 25, smgw: 50 },
+        wt  : { mw: 5, bw: 15, mgw: 25, smgw: 50 },
         mxl : 10,
         rtp : [ 96.75, 96.75 ],
 
