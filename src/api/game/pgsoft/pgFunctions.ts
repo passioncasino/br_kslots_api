@@ -621,9 +621,9 @@ export const encodeBase64Utf8 = ( ea: string ) => {
             }
         ]
     };
-
+    
+    console.log(`verify address is ${process.env.VERIFY_HOST}/history/redirect.html?ot=&${ea}`);
     const msgArr = encode( msgData );
     const msg = btoa(String.fromCharCode(...msgArr));
-    // console.log(`msg=`, msg);
     return msg;
 }
