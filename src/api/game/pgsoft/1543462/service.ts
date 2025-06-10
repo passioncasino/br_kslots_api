@@ -9,7 +9,7 @@ export const fortuneRabbitService = {
         const wild = 0;
         let isBalance = false;
         const userInfo = await getUserInfo( actionData.atk, GAMECODE );
-        console.log(`sid=`, userInfo.gameStatus.sid)
+
         // if( 
         //     ( userInfo.gameStatus.sid!=="0" &&  
         //     userInfo.gameStatus.sid !== actionData.id ) || 

@@ -43,7 +43,11 @@ connect(String(process.env.DBNAME) ).then( async (loaded) => {
 
         app.set("trust proxy", true);
         app.use(cors({ origin: "*", credentials: true }));
-        app.use(helmet());
+        app.use(
+        helmet({
+        contentSecurityPolicy: false, // Desactiva CSP de Helmet
+        })
+        );    
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(requestLogger);

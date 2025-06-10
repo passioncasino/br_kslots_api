@@ -1,4 +1,3 @@
-import { getCurrentTime } from '@/api/utill/functions';
 import { PGActionType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
 import { getUserInfo, updateUserInfo, updateUserBalance, saveHistory, updateSequenceHistory } from '@/common/models';
 import { getGameInfo, generateSpinResponse } from './function';
@@ -76,7 +75,6 @@ export const cashManiaService = {
             },
             err: null
         };
-        const now = getCurrentTime();
         const historyInfo : HistoryType = {
             gameCode : GAMECODE, 
             roundid : nextId, 

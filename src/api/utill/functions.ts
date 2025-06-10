@@ -63,12 +63,6 @@ export const generateProviderErrorString = ( errorCode : number ) => {
     return errorString;
 }
 
-export const generateRoundNo = ( now : number, symbolName : string ) => {
-    round++;
-    if( round>100000 ) round = 0;
-    return "" + String(symbolName) + now + round.toString().padStart(8, '0');
-}
-
 export const generateErrorResponse = ( errorCode:number ) => {
     const response = {
         error : errorCode,

@@ -1,5 +1,4 @@
 import isaac from 'isaac';
-import * as GlobalFunctions from '@/api/utill/functions';
 import * as GlobalConstants from '@/api/utill/constants';
 const GAMECODE = "126";
 

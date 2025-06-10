@@ -123,7 +123,7 @@ const createUserInfo = async ( userInfo:any, oldUser:any, state: number ) => {
             userInfo.gameStatus = oldGameStatus
         }
         const res = await Users.insertOne( userInfo );
-        if( res.insertedId ) return 1;
+        if( res.insertedId ) return res.insertedId;
         else return 0;
     } catch ( err ) {
         console.log("====> createUserInfo ::", err );
