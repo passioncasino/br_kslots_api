@@ -1,5 +1,5 @@
+import { getCurrentTime } from '@/api/utill/functions';
 import { PGActionType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
-import { getCurrentTime, generateRoundNo } from '@/api/utill/functions';
 import { getUserInfo, updateUserInfo, updateUserBalance, saveHistory, updateSequenceHistory } from '@/common/models';
 import { getGameInfo, generateSpinResponse } from './function';
 import { generatePgNextId, generatePGError } from '@/api/game/pgsoft/pgFunctions';
@@ -77,10 +77,9 @@ export const cashManiaService = {
             err: null
         };
         const now = getCurrentTime();
-        const roundid = generateRoundNo( now, GAMECODE );
         const historyInfo : HistoryType = {
             gameCode : GAMECODE, 
-            roundid : roundid, 
+            roundid : nextId, 
             user : userInfo.property.user,
             balance : 0,
             currency : userInfo.property.currency,

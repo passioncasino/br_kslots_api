@@ -1,4 +1,3 @@
-import { getCurrentTime, generateRoundNo } from '@/api/utill/functions';
 import { getUserInfo, updateUserInfo, updateUserBalance, saveHistory, updateSequenceHistory } from '@/common/models';
 import { PGActionType, PGScoreProps, IPGSpinParamType, HistoryType, SequenceHistoryType } from '@/api/utill/interface';
 import { getSymbols, checkScoreLine, getPrizeInfo, generateSpinResponse } from './function';
@@ -10,16 +9,16 @@ export const fortuneRabbitService = {
         const wild = 0;
         let isBalance = false;
         const userInfo = await getUserInfo( actionData.atk, GAMECODE );
-        
-        if( 
-            ( userInfo.gameStatus.sid!=="0" &&  
-            userInfo.gameStatus.sid !== actionData.id ) || 
-            (actionData.id === "0" &&
-            userInfo.gameStatus.id === "0")
-        ) {
-            const res = generatePGError( 1201, actionData.traceId );
-            return res;
-        }
+        console.log(`sid=`, userInfo.gameStatus.sid)
+        // if( 
+        //     ( userInfo.gameStatus.sid!=="0" &&  
+        //     userInfo.gameStatus.sid !== actionData.id ) || 
+        //     (actionData.id === "0" &&
+        //     userInfo.gameStatus.id === "0")
+        // ) {
+        //     const res = generatePGError( 1201, actionData.traceId );
+        //     return res;
+        // }
 
         if( userInfo.gameStatus.coin !== Number(actionData.cs) * Number(actionData.ml)) {
             userInfo.gameStatus.coin = Number(actionData.cs) * Number(actionData.ml);
@@ -77,11 +76,9 @@ export const fortuneRabbitService = {
             err: null
         };
 
-        const now = getCurrentTime();
-        const roundid = generateRoundNo( now, GAMECODE );
         const historyInfo : HistoryType = {
             gameCode : GAMECODE, 
-            roundid : roundid, 
+            roundid : nextId, 
             user : userInfo.property.user,
             balance : 0,
             currency : userInfo.property.currency,
@@ -95,7 +92,7 @@ export const fortuneRabbitService = {
             if( userInfo.gameStatus.fsCnt === 1 ) {
                 userInfo.balance = Math.round( userInfo.balance*100 - stake*100 ) / 100;
                 isBalance = true;
-                userInfo.property.lastId = roundid;
+                userInfo.property.lastId = nextId;
                 await saveHistory( historyInfo );
             } else {
                 const sequenceHistoryInfo : SequenceHistoryType = {

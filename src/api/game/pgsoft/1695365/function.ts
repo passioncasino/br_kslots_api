@@ -1,5 +1,4 @@
 import isaac from 'isaac';
-import * as GlobalFunctions from '@/api/utill/functions';
 
 const PAYLINES = [[1, 4, 7], [0, 3, 6], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
@@ -197,7 +196,6 @@ const checkPayLinesAndCalcBenefits = (symbols: number[], betAmount: number) => {
 }
 
 export const generateSpinResponse = ( spinParams:any ) => {
-    const now = GlobalFunctions.getCurrentTime();
     const betMoney = Math.round(100 * spinParams.betCoin) / 20;
     const spinCycleWin = Math.round(100 * spinParams.spinCycleWin) / 100;
     const gameInfo = spinParams.gameInfo;
@@ -264,8 +262,8 @@ export const generateSpinResponse = ( spinParams:any ) => {
         ocr: null,
         mr: null,
         ge: [geVal, 11],
-        psid: (now * 100).toString(),
-        sid: (now * 100).toString(),
+        psid: spinParams.nextId,
+        sid: spinParams.nextId,
         blb: Math.round(100 * spinParams.balance + 100 * tbVal) / 100,
         blab: spinParams.balance,
         bl: Math.round(100 * spinParams.balance + 100 * spinCycleWin) / 100

@@ -1,7 +1,7 @@
 import * as Models from "@/common/models";
 import { PGGAMEINFO, PAYLINESBYGAME, PAYTABLESBYGAME, ERRORSTRING } from "@/api/utill/constants";
-import { HistoryItemType, PGScoreProps, IPGwinning } from "@/api/utill/interface";
-
+import { HistoryItemType, PGScoreProps, IPGwinning, IPGv1BetItem } from "@/api/utill/interface";
+const { encode } = require('@msgpack/msgpack');
 const currencyData = require("@/currencies.json");
 let nid = 1e12, prefix = 192453;
 
@@ -110,6 +110,7 @@ export const generatePGError = ( error:number, tid:string ) => {
     const errMsg: {[key: number]: string } = {
         1105: "Internal server error.",
         1201: "GameStateNotFoundException",
+        1308: "Session Expired.",
         1310: "OERR: Operator return an error. Failed to verify operator player session, error code : 1200.",
     }
 
@@ -142,7 +143,7 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
         const resp: any = {
             dt: {
                 oj: { 
-                    jid: 11
+                    jid: 1
                 },
                 pid: "2PP8xwNlmH",
                 pcd: pcd,
@@ -172,19 +173,19 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
                     }
                 ],
                 uiogc: {
-                    bb: 0,
-                    gec: 0,
+                    bb: 1, // 0
+                    gec: 1, // 0
                     cbu: 0,
                     cl: 0,
                     mr: 0,
                     phtr: 0,
                     vc: 0,
-                    bfbsi: 0,
-                    bfbli: 0,
+                    bfbsi: 1, // 0
+                    bfbli: 2, // 0
                     il: 0,
                     rp: 0,
-                    gc: 1,
-                    ign: 1,
+                    gc: 0, // 1
+                    ign: 0, // 1
                     tsn: 0,
                     we: 0,
                     gsc: 0,
@@ -195,23 +196,26 @@ export const generateVerifyOperatorPlayerSession = async( otk: string, gi:string
                     ivs: 1,
                     ir: 0,
                     hn: 1,
-                    swfbsi: 0,
-                    swfbli: 0,
-                    grtp: 1,
-                    bf: 0,
+                    grt: 0, // remove
+                    grtp: 0, // 1
+                    bf: 1, // 0
                     et: 0,
                     np: 0,
-                    as: 1000,
-                    asc: 1,
+                    as: 0, // 1000
+                    asc: 0, // 1
                     std: 0,
                     hnp: 0,
-                    ts: 1,
+                    ts: 0, // 1
                     smpo: 0,
+                    /*
+                    swfbsi: 0,
+                    swfbli: 0,
                     swf: 0,
                     sp: 1,
                     rcf: 0,
                     sbb: 1,
                     hwl: 1,
+                    */
                 },
                 ec: [],
                 occ: {
@@ -454,7 +458,8 @@ export const generateResourcesTypeIds = async() => {
         const dtItem = {
             rid: idx,
             rtid: 14,
-            url: `https://public.pg-nmga.com/pages/static/image/en/SocialGameSmall/${idx}/${icon}.png`,
+            // url: `https://public.pg-nmga.com/pages/static/image/en/SocialGameSmall/${idx}/${icon}.png`,
+            url: `https://api.bgsoftware.dev/pages/static/image/en/SocialGameSmall/${idx}/${icon}.png`,
             l:"en-US",
             ut: "2019-10-01T02:33:24"
         };
@@ -465,6 +470,41 @@ export const generateResourcesTypeIds = async() => {
         err: null
     };
     return response;    
+}
+
+export const getV1BetDetails = async( sid:string, detailData:any ) => {
+    const bdData: IPGv1BetItem[] = [];
+    detailData.forEach((item: any) => {
+        const bdItem = {
+            tid: sid,
+            tba: 0.5,
+            twla: -0.4,
+            bl: 17.88,
+            bt: 1749349568629,
+            gd: item.dt.si
+        }
+        bdData.push( bdItem );
+    });
+    const resp = {
+        dt: {
+            bh: {
+                tid: sid,
+                gid: 1682240,
+                cc: "BRL",
+                gtba: 0.50,
+                gtwla: -0.40,
+                gtwa: 0.10,
+                bt: 1749349568629,
+                ge: [ 1, 11 ],
+                bd: bdData,
+                "mgcc": 0,
+                "fscc": 0
+            }
+        },
+        "err": null
+    };
+
+    return resp;
 }
 
 /**
@@ -557,4 +597,33 @@ export const generateBetHistory = ( gameCode:string, historyData:HistoryItemType
         err: null
     }
     return response;
+}
+
+/**
+ * 
+ */
+export const encodeBase64Utf8 = ( ea: string ) => {
+    const msgData = {
+        m: {
+            tid: '',
+            ci: '189.1.170.50',
+            rt: 'NCeUHJawxd.gif',
+            at: 'healthcheck'
+        },
+        f: [
+            {
+                u: `${process.env.VERIFY_HOST}/history/redirect.html?ot=&${ea}`,
+                w: 50
+            },
+            {
+                u: `${process.env.VERIFY_HOST}/history/redirect.html?ot=&${ea}`,
+                w: 50
+            }
+        ]
+    };
+
+    const msgArr = encode( msgData );
+    const msg = btoa(String.fromCharCode(...msgArr));
+    // console.log(`msg=`, msg);
+    return msg;
 }

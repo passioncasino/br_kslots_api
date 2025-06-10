@@ -114,3 +114,12 @@ export interface CpfType {
         m: number
     }
 }
+
+export interface IPGv1BetItem {
+    tid: string
+    tba: number
+    twla: number
+    bl: number
+    bt: number
+    gd: object
+}

@@ -92,7 +92,6 @@ const generateScoreInfoStr = (scoreInfo: any[], benefits: number[]) => {
 }
 
 export const generateSpinResponse = (spinParams: any) => {
-    const now = GlobalFunctions.getCurrentTime();
     const betMoney = Math.round(spinParams.betCoin * 100) / 20;
     let itwFlag = true;
     let irsFlag = false;
@@ -152,8 +151,8 @@ export const generateSpinResponse = (spinParams: any) => {
         ocr: null,
         mr: null,
         ge: [nstVal, 11],
-        psid: (now * 100).toString(),
-        sid: (now * 100).toString(),
+        psid: spinParams.nextId,
+        sid: spinParams.nextId,
         blb: Math.round( spinParams.balance*100 + tbVal*100 ) / 100,
         // blab: spinParams.fwsCnt === 0 ? spinParams.balance : Math.round( spinParams.balance*100 + tbVal*100 ) / 100,
         blab: spinParams.balance,

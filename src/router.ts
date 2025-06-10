@@ -1,3 +1,4 @@
+import multer from 'multer';
 import express, { Request, Response, Router } from 'express';
 import { getUserInfo  } from '@/common/models';
 import { getKeyByEndpoint } from '@/api/game/pgsoft/pgFunctions';
@@ -8,6 +9,8 @@ import { fortuneOxService } from "@/api/game/pgsoft/98/service";
 import { fortuneTigerService } from "@/api/game/pgsoft/126/service";
 import { fortuneDragonService } from "@/api/game/pgsoft/1695365/service";
 import { cashManiaService } from "@/api/game/pgsoft/1682240/service";
+
+const upload = multer();
 
 export const gameRouter: Router = (() => {
     const router = express.Router();
@@ -21,6 +24,13 @@ export const gameRouter: Router = (() => {
 
 export const pgWebRouter: Router = (() => {
     const router = express.Router();
+    router.post('/game-proxy/v1/BetDetails/Get', upload.none(), async(req: Request, res: Response) => {
+        const { gid, sid, atk } = req.body;
+
+        const response = await pgSoftService.getV1BetDetails( gid as string, sid as string, atk as string );
+        res.json( response );
+    });
+
     router.post('/auth/session/v2/verifySession', async (req: Request, res: Response) => {
         const { traceId } = req.query;
         const { btt, vc, pf, l, gi, tk, otk } = req.body;
@@ -103,6 +113,17 @@ export const pgGameRouter: Router = (() => {
         const response = await pgSoftService.getGameInfo( atk, String(gameCode) );
 
         res.json(response);
+    });
+
+    return router;
+})();
+
+export const pgAuthRouter: Router = (() => {
+    const router = express.Router();
+    router.post('/GetBetHistoryVerifyHtml', async(req: Request, res: Response) => {
+        const { ea, env } = req.body;
+        const resp = pgSoftService.getBetHistoryVerifyHtml( ea, env );
+        res.json( resp );
     });
 
     return router;

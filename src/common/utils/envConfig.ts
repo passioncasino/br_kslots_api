@@ -11,6 +11,7 @@ export const env = cleanEnv(process.env, {
   REPLAY_HOST : str(),
   ASSET_HOST : str(),
   SERVER_HOST : str(),
+  VERIFY_HOST : str(),
   LOBBY_HOST : str(),
   CASHIER_HOST : str(),
 

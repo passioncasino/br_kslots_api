@@ -281,7 +281,7 @@ export const saveHistory = async ( historyInfo: any ) => {
     try {
         const collection = selectCollection( historyInfo.gameCode );
         if( collection===false ) {
-            return generateErrorResponse( 502 )
+            return generateErrorResponse( 502 );
         } else {
             const now = new Date().getTime();
             const historyItem = {
@@ -343,6 +343,18 @@ export const getPGHistory = async( gameCode: string, userCode: string ) => {
         return result;
     } catch (error) {
         console.log("getPGHistory", error);
+        return -1;
+    }
+}
+
+export const getPGHistoryItem = async( gid:string, sid: string ) => {
+    try {
+        const collection = selectCollection( gid );
+        const filter = { roundid: sid };
+        const history = await collection.findOne( filter );
+        return history;
+    } catch (error) {
+        console.log(`eerror:`, error);
         return -1;
     }
 }

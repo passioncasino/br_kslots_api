@@ -1,6 +1,5 @@
 import * as GlobalTypes from '@/api/utill/interface';
 import * as GlobalConstants from '@/api/utill/constants';
-import * as GlobalFunctions from '@/api/utill/functions';
 import * as Models from '@/common/models';
 import * as Functions from '@/api/game/pgsoft/1695365/function';
 import { generatePgNextId, generatePGError } from '@/api/game/pgsoft/pgFunctions';
@@ -44,12 +43,14 @@ export const fortuneDragonService = {
         }
         userInfo.gameStatus.twMoney = twMoney;
 
+        const nextId = generatePgNextId();
         const spinParams : any = {
             ml : ml,
             pf : Number(actionData.pf),
             wk : actionData.wk,
             coin : Number(actionData.cs),
             spinCycleWin: twMoney,
+            nextId : nextId,
             betCoin : betCoin,
             balance : userInfo.balance,
             gameInfo : gameInfo,
@@ -65,10 +66,9 @@ export const fortuneDragonService = {
             },
             err: null
         };
-        const roundid = generatePgNextId();
         const historyInfo : GlobalTypes.HistoryType = {
             gameCode : GAMECODE, 
-            roundid : roundid, 
+            roundid : nextId, 
             user : userInfo.property.user,
             balance : 0,
             currency : userInfo.property.currency,
@@ -81,7 +81,7 @@ export const fortuneDragonService = {
         if (userInfo.gameStatus.isFWS) {            
             if (userInfo.gameStatus.fwsCnt === 1) {
                 await Models.saveHistory( historyInfo );
-                userInfo.property.lastId = roundid;
+                userInfo.property.lastId = nextId;
             } else {
                 const sequenceHistoryInfo : GlobalTypes.SequenceHistoryType = {
                     gameCode : GAMECODE, 

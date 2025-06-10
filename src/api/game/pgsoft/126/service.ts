@@ -48,6 +48,7 @@ export const fortuneTigerService = {
             if( userInfo.gameStatus.fwsCnt === 0) userInfo.balance = Math.round( userInfo.balance*100-betCoin*1000 ) / 100;
         }
         const spinProfit = userInfo.gameStatus.isFWS ? 0 : lineProfit;
+        const nextId = generatePgNextId();
 
         const spinParams : any = {
             ml : ml,
@@ -57,6 +58,7 @@ export const fortuneTigerService = {
             betCoin : betCoin,
             isFWS : userInfo.gameStatus.isFWS,
             newFwsFlag : GlobalFunctions.compareArray( userInfo.gameStatus.fwsSymbols, symbolsInfo.symbols ),
+            nextId: nextId,
             balance : userInfo.balance,
             symbols : symbolsInfo.symbols,
             scoreInfo : scoreInfo,
@@ -73,10 +75,9 @@ export const fortuneTigerService = {
             err: null
         }
 
-        const roundid = generatePgNextId();
         const historyInfo : GlobalTypes.HistoryType = {
             gameCode : GAMECODE, 
-            roundid : roundid, 
+            roundid : nextId, 
             user : userInfo.property.user,
             balance : 0,
             currency : userInfo.property.currency,
@@ -98,7 +99,7 @@ export const fortuneTigerService = {
             }
         } else {
             if( userInfo.gameStatus.fwsCnt===0 ) {
-                userInfo.property.lastId = roundid;
+                userInfo.property.lastId = nextId;
                 await Models.saveHistory( historyInfo );
             } else{
                 await  Models.updateSequenceHistory( sequenceHistoryInfo );

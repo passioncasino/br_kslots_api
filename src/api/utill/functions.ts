@@ -1,5 +1,4 @@
 import isaac from 'isaac';
-import * as Models from "@/common/models";
 import { LauncherType } from "@/api/utill/interface";
 import * as GlobalConstants from "@/api/utill/constants";
 
@@ -67,7 +66,7 @@ export const generateProviderErrorString = ( errorCode : number ) => {
 export const generateRoundNo = ( now : number, symbolName : string ) => {
     round++;
     if( round>100000 ) round = 0;
-    return "" + String(symbolName) + "_" + now + round.toString().padStart(8, '0');
+    return "" + String(symbolName) + now + round.toString().padStart(8, '0');
 }
 
 export const generateErrorResponse = ( errorCode:number ) => {

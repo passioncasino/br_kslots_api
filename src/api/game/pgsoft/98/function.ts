@@ -176,8 +176,8 @@ export const generateSpinResponse = ( spinParams:any ) => {
             geVal,
             11
         ],
-        psid: (now * 100).toString(),
-        sid: (now * 100).toString(),
+        psid: spinParams.sid,
+        sid: spinParams.sid,
         blb: Math.round(100 * spinParams.balance + 100 * tbVal) / 100,
         blab: spinParams.balance,
         bl: Math.round(100 * spinParams.balance + 100 * spinParams.spinCycleWin) / 100
