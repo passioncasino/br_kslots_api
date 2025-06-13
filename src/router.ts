@@ -19,6 +19,13 @@ export const gameRouter: Router = (() => {
         const serviceResponse = await commonService.provideLauncher(launcher);
         res.json(serviceResponse);
     });
+
+    router.delete('/deleteGameLog/:game', async( req: Request, res: Response ) => {
+        const game = req.params.game;
+        const resp = await commonService.deleteHistoryLog( game );
+        res.json( resp );
+    });
+    
     return router;
 })();
 

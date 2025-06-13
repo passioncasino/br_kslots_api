@@ -13,8 +13,8 @@ export const fortuneOxService = {
         const betCoin = Math.round(cs * ml * 100) / 100;
         userInfo.gameStatus.coin = Number(actionData.cs);
 
-        if ((userInfo.balance - 10 * betCoin) < 0) return generatePGError( 500, actionData.traceId );
-        if (!userInfo.gameStatus.isFWS) userInfo.balance = Math.round(100 * userInfo.balance - 1000 * betCoin) / 100;
+        if ( userInfo.balance < 10*betCoin ) return generatePGError( 500, actionData.traceId );
+        if (!userInfo.gameStatus.isFWS) userInfo.balance = Math.round( 100*userInfo.balance - 1000*betCoin ) / 100;
 
         const gameInfo = getGameInfo( userInfo.gameStatus.isFWS, betCoin );
         if (gameInfo.isOxFeature) {
@@ -28,13 +28,13 @@ export const fortuneOxService = {
         const twMoney = Math.round(100 * gameInfo.scoreInfo.totalWin) / 100;
         const nextId = generatePgNextId();
         const spinParams : any = {
-            ml : ml,
+            ml,
             pf : Number(actionData.pf),
             wk : actionData.wk,
             coin : Number(actionData.cs),
             sid: nextId,
             spinCycleWin: twMoney,
-            betCoin : betCoin,
+            betCoin,
             balance : userInfo.balance,
             gameInfo : gameInfo,
             isFWS : userInfo.gameStatus.isFWS,

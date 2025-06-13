@@ -458,8 +458,7 @@ export const generateResourcesTypeIds = async() => {
         const dtItem = {
             rid: idx,
             rtid: 14,
-            // url: `https://public.pg-nmga.com/pages/static/image/en/SocialGameSmall/${idx}/${icon}.png`,
-            url: `https://api.bgsoftware.dev/pages/static/image/en/SocialGameSmall/${idx}/${icon}.png`,
+            url: `${process.env.ASSET_HOST}/pages/static/image/en/SocialGameSmall/${idx}/${icon}.png`,
             l:"en-US",
             ut: "2019-10-01T02:33:24"
         };
@@ -612,17 +611,16 @@ export const encodeBase64Utf8 = ( ea: string ) => {
         },
         f: [
             {
-                u: `${process.env.VERIFY_HOST}/history/redirect.html?ot=&${ea}`,
+                u: `${process.env.ASSET_HOST}/history/redirect.html?ot=&${ea}`,
                 w: 50
             },
             {
-                u: `${process.env.VERIFY_HOST}/history/redirect.html?ot=&${ea}`,
+                u: `${process.env.ASSET_HOST}/history/redirect.html?ot=&${ea}`,
                 w: 50
             }
         ]
     };
-    
-    console.log(`verify address is ${process.env.VERIFY_HOST}/history/redirect.html?ot=&${ea}`);
+
     const msgArr = encode( msgData );
     const msg = btoa(String.fromCharCode(...msgArr));
     return msg;

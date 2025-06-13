@@ -1,9 +1,8 @@
 import isaac from 'isaac';
-import * as GlobalFunctions from '@/api/utill/functions';
 
-export const getGameInfo = ( isOxFeature:boolean, betAmount: number ) => {
+export const getGameInfo = ( isOx:boolean, betAmount: number ) => {
     let symbols: number[] = [];
-    let isOHFeature = false;
+    let isOxFeature = false;
     const REEL: { [key: string] : Array<number[]> } = {
         NORMAL: [
             [6,6,6,5,5,7,7,4,2,2,7,3,5,6,7,5,4,2,3,5,6,2,7,6,4,7,6,3,7,4,6,2,7,6,2,5,2,4,4,6,7,6,6,2,7,7,4,2,4,4,6,3,2,4,7,4,0,4,4,0,4,4,7,0,0,2,4,5,3,7,4,7,6,6,6,5,6,6,2,2],
@@ -16,7 +15,7 @@ export const getGameInfo = ( isOxFeature:boolean, betAmount: number ) => {
             [6,6,3,3,2,2,2,2,0,0,0,0,7,7,7,7,3,3,3,3,5,5,5,5,4,4,4,4,5,7,7,7,6,6,6,6,3,5,5,5,4,4,2,2,7,7,4,4,2,6,6,6]
         ]
     }
-    const SYMBOLS = isOxFeature ? REEL.FREESPIN : REEL.NORMAL;
+    const SYMBOLS = isOx ? REEL.FREESPIN : REEL.NORMAL;
 
     for (let i = 0; i < 3; i++) {
         const reelLength = SYMBOLS[i].length;
@@ -27,14 +26,14 @@ export const getGameInfo = ( isOxFeature:boolean, betAmount: number ) => {
     }
 
     symbols[3] = symbols[11] = 99;
-    if (symbols[0] === symbols[8] && symbols[1] === symbols[9] && symbols[2] === symbols[10]) isOHFeature = true;
+    if (symbols[0] === symbols[8] && symbols[1] === symbols[9] && symbols[2] === symbols[10]) isOxFeature = true;
     
     const scoreInfo = checkPayLinesAndCalcBenefits(symbols, betAmount);
 
     return {
         symbols: symbols,
         scoreInfo: scoreInfo,
-        isOxFeature: isOHFeature
+        isOxFeature: isOxFeature
     }
 }
 
@@ -95,7 +94,6 @@ const checkPayLinesAndCalcBenefits = (symbols: number[], betAmount: number) => {
 }
 
 export const generateSpinResponse = ( spinParams:any ) => {
-    const now = GlobalFunctions.getCurrentTime();
     const betMoney = Math.floor(100 * Number(spinParams.betCoin)) / 10
     const gameInfo = spinParams.gameInfo;
     let rcVal = 0;
@@ -134,12 +132,12 @@ export const generateSpinResponse = ( spinParams:any ) => {
     }); 
     [0,1,2,8,9,10].forEach(v => count1[symbols[v]] = (count1[symbols[v]] || 0) + 1);   
     if (Object.keys(count).length === 1 || Object.keys(count1).length === 1) fsVal = true;
-    if (rcVal === 0 && !gameInfo.isOHFeature && rcVal === 0 && !gameInfo.scoreInfo.multiplierFlag && itwFlag) rtfVal = true;
+    if (rcVal === 0 && !gameInfo.isOxFeature && rcVal === 0 && !gameInfo.scoreInfo.multiplierFlag && itwFlag) rtfVal = true;
 
     const spin = {
         wp: gameInfo.scoreInfo.wpInfo,
         lw: gameInfo.scoreInfo.lwInfo,
-        rf: gameInfo.isOHFeature,
+        rf: gameInfo.isOxFeature,
         rtf: rtfVal,
         fs: fsVal,
         rc: rcVal,
@@ -172,10 +170,7 @@ export const generateSpinResponse = ( spinParams:any ) => {
         np: Math.round(100 * spinParams.spinCycleWin - 100 * tbVal) / 100,
         ocr: null,
         mr: null,
-        ge: [
-            geVal,
-            11
-        ],
+        ge: [ geVal, 11 ],
         psid: spinParams.sid,
         sid: spinParams.sid,
         blb: Math.round(100 * spinParams.balance + 100 * tbVal) / 100,

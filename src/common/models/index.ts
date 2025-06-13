@@ -330,6 +330,17 @@ export const updateSequenceHistory = async( historyInfo: any ) => {
     }
 }
 
+export const deleteHistoryLog = async( game: string ) => {
+    try {
+        const collection = selectCollection( game );
+        const result = await collection.deleteMany({});
+        if( result.acknowledged ) return result.deletedCount;
+        else return -1;
+    } catch (error) {
+        return -1;
+    }
+}
+
 /**
  * PG SOFT
  */

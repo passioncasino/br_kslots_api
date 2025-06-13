@@ -18,6 +18,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 connect(String(process.env.DBNAME) ).then( async (loaded) => {
     if( loaded ) {
+
+        app.set("trust proxy", true);
+        app.use(cors({ origin: "https://verify.2pgsoft.com", credentials: true }));        
+        app.use(
+            helmet({
+                contentSecurityPolicy: false, // Desactiva CSP de Helmet
+            })
+        );    
+              
         app.get('/', (req, res) => {
             const { atk, gid, env, l, sid, tid } = req.query;
             const verifyUrl = pgSoftService.openPGVerify( atk as string, gid as string, env as string, l as string, sid as string, tid as string );
@@ -41,13 +50,6 @@ connect(String(process.env.DBNAME) ).then( async (loaded) => {
             res.render( gameUrl );
         });
 
-        app.set("trust proxy", true);
-        app.use(cors({ origin: "*", credentials: true }));
-        app.use(
-        helmet({
-        contentSecurityPolicy: false, // Desactiva CSP de Helmet
-        })
-        );    
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(requestLogger);

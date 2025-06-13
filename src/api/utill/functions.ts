@@ -2,8 +2,6 @@ import isaac from 'isaac';
 import { LauncherType } from "@/api/utill/interface";
 import * as GlobalConstants from "@/api/utill/constants";
 
-let round = 0;
-
 export const validateProviderParams = ( params : LauncherType ) => {
     if(params.ip === "") return 7;
     if(params.mode === "") return 7;

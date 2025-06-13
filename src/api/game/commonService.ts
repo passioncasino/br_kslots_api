@@ -76,6 +76,19 @@ export const commonService = {
             responseProvider = GlobalFunctions.generateProviderErrorString( validateVal );
         }
         return responseProvider;
+    },
+
+    deleteHistoryLog: async( game: string ) => {
+        const result = await Models.deleteHistoryLog( game );
+        if( result>-1 ) {
+            const res = {
+                error: 0,
+                description: `You delete ${result} datas.`
+            }
+            return res;
+        } else {
+            return GlobalFunctions.generateErrorResponse(501);
+        }
     }
 }
 
